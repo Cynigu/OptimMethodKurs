@@ -133,7 +133,7 @@
                 <GroupBox Header="Результаты">
                     <StackPanel Margin="5, 5, 5, 5">
                         <TextBox IsReadOnly="True"
-                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="70"/>
+                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="62"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
