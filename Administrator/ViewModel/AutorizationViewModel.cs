@@ -45,7 +45,7 @@ namespace Startup.ViewModel
 
         public AutorizationViewModel(IUserService userService)
         {
-            Login = "user/admin";
+            //Login = "admin";
             //Password = "researcher";
             _userService = userService;
 

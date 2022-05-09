@@ -43,9 +43,17 @@ namespace User.ViewModel
         private string result;
         private double ε;
 
+        private string? descriptionTask;
         #endregion
 
         #region get; set
+
+        public string? DescriptionTask
+        {
+            get => descriptionTask;
+            set => this.RaiseAndSetIfChanged(ref descriptionTask, value);
+        }
+
         public double Getk
         {
             get { return k; }
@@ -114,7 +122,18 @@ namespace User.ViewModel
         public TaskView GetcurrentTask
         {
             get { return currentTask; }
-            set { this.RaiseAndSetIfChanged(ref currentTask, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref currentTask, value);
+                if (currentTask != null)
+                {
+                    DescriptionTask = currentTask.Description;
+                }
+                else
+                {
+                    DescriptionTask = null;
+                }
+            }
         }
         public string Getsing
         {
