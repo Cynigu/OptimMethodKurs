@@ -9,6 +9,9 @@
         mc:Ignorable="d"
         Title="Решение оптимизационных задач" Height="510" Width="980" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="27"></Setter>
+        </Style>
     </Window.Resources>
     <StackPanel>
         <Menu>
@@ -130,7 +133,7 @@
                 <GroupBox Header="Результаты">
                     <StackPanel Margin="5, 5, 5, 5">
                         <TextBox IsReadOnly="True"
-                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="80"/>
+                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="70"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
