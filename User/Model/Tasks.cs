@@ -14,6 +14,7 @@ namespace User.Model
         public double GetTask(Point2 point);
         public void RegisterTask(List<TaskParameterValueView> parameter);
     }
+
     internal class RegisterTask15: ITask
     {
         public string? Name { get; } = "Вариант 15";
@@ -75,12 +76,46 @@ namespace User.Model
             return FunctionValue;
         }
     }
+
+    internal class RegisterTask13: ITask
+    {
+        private double a;
+        private double β;
+        private double μ;
+        private double A;
+        private double V;
+        private double G;
+        public string? Name { get; } = "Вариант 13";
+        public double GetTask(Point2 point)
+        {
+            double FunctionValue = a * (G * μ * (Math.Pow(point.Y - point.X, V) + Math.Pow(β * A - point.X, V)));
+            return FunctionValue;
+        }
+
+        public void RegisterTask(List<TaskParameterValueView> parameter)
+        {
+            this.a = parameter.Where(x => x.Notation == "α" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.β = parameter.Where(x => x.Notation == "β" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.μ = parameter.Where(x => x.Notation == "γ" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.A = parameter.Where(x => x.Notation == "A" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.G = parameter.Where(x => x.Notation == "G" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.V = parameter.Where(x => x.Notation == "V" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+        }
+    }
+    
     internal static class Tasklist
     {
         public static List<ITask> tasks = new List<ITask> 
         { 
             new RegisterTask15(), 
-            new RegisterTask18() 
+            new RegisterTask18(),
+            new RegisterTask13()
         };
     }
 }

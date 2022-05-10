@@ -7,10 +7,15 @@
         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
-        Title="Решение оптимизационных задач" Height="510" Width="980" WindowStartupLocation="CenterScreen" >
+        Title="Решение оптимизационных задач" Height="600" Width="1020" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Height" Value="27"></Setter>
+            <Setter Property="Height" Value="37"></Setter>
+            <Setter Property="Width" Value="200"></Setter>
+        </Style>
+        <Style TargetType="wpfx:DoubleUpDown">
+            <Setter Property="Width" Value="60"></Setter>
+            <Setter Property="Margin" Value="3"></Setter>
         </Style>
     </Window.Resources>
     <StackPanel>
@@ -24,9 +29,81 @@
         </Menu>
         <StackPanel Orientation="Horizontal">
             <StackPanel>
+                <GroupBox Header="Задача" >
+                    <StackPanel>
+                        <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentTask}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Метода оптимизации" DockPanel.Dock="Top">
+                    <StackPanel>
+                        <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentMethod}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Экстремум">
+                    <StackPanel>
+                        <ComboBox HorizontalContentAlignment="Center"
+                                  ItemsSource="{Binding Path = GetlistExtremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Path = Getextremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Точность решения ε:"/>
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2" Grid.Row="2" Minimum="0.000001" Maximum="1"
+                                           Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                               Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label HorizontalContentAlignment="Center" Content="⩾ Х ⩾" Grid.Column="1"/>
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                               Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                        <Label HorizontalContentAlignment="Center" Content="⩾ Y ⩾" Grid.Column="1" Grid.Row="1"/>
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" Content="Y"/>
+                        <ComboBox HorizontalContentAlignment="Center" Grid.Column="1" 
+                                      ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                      SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label HorizontalContentAlignment="Center" Content="X +" Grid.Column="3"/>
+                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
+                                               Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            
+            <GroupBox Header="Выполнение" DockPanel.Dock="Top">
+                <StackPanel>
+                    <Button Content="3D График" Command="{Binding Build3DChart}"/>
+                    <Button DockPanel.Dock="Top" Content="Вычислить" Command="{Binding Start}"/>
+                    <Button Content="Очистить график" Command="{Binding Clear}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Результаты">
+                <StackPanel>
+                    <TextBox IsReadOnly="True"
+                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" Width="250"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
                 <GroupBox Header="График функции">
                     <StackPanel>
-                        <ig:XamDataChart Width="420" Height="420">
+                        <ig:XamDataChart Width="460" Height="380">
                             <ig:XamDataChart.Axes>
                                 <ig:NumericXAxis x:Name="xAxis" Title="Ось X"/>
                                 <ig:NumericYAxis x:Name="yAxis" Title="Ось Y"/>
@@ -57,89 +134,9 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <StackPanel>
-                <GroupBox Header="Выбор задачи" >
-                    <StackPanel Margin="5, 5, 5, 5">
-                        <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentTask}"/>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Выбор метода оптимизации" DockPanel.Dock="Top">
-                    <StackPanel Margin="5, 5, 5, 5">
-                        <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentMethod}"/>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
-                    <StackPanel>
-                        <Grid Margin="5,5,5,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="23"/>
-                                <RowDefinition Height="23"/>
-                                <RowDefinition Height="26"/>
-                                <RowDefinition Height="250*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70*"/>
-                                <ColumnDefinition Width="40*"/>
-                                <ColumnDefinition Width="70*"/>
-                            </Grid.ColumnDefinitions>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                           Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ Х ⩾" Grid.Column="1"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                           Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ Y ⩾" Grid.Column="1" Grid.Row="1"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
-                            <Label HorizontalContentAlignment="Center" Content="Погрешность расчетов ε:" Grid.Row="2" Grid.ColumnSpan="2"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2" Grid.Row="2" Minimum="0.000001" Maximum="1"
-                                           Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Grid>
-                        <Grid Margin="5,5,5,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="23"/>
-                                <RowDefinition Height="302*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20*"/>
-                                <ColumnDefinition Width="70*"/>
-                                <ColumnDefinition Width="70*"/>
-                                <ColumnDefinition Width="40*"/>
-                                <ColumnDefinition Width="70*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label HorizontalContentAlignment="Center" Content="Y"/>
-                            <ComboBox HorizontalContentAlignment="Center" Grid.Column="1" 
-                                  ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="X +" Grid.Column="3"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
-                                           Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Grid>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Выполнение" DockPanel.Dock="Top">
-                    <StackPanel Margin="5, 5, 5, 5">
-                        <Button Content="Построить 3D График" Command="{Binding Build3DChart}"/>
-                        <Button Content="Очистить график" Command="{Binding Clear}"/>
-                        <Button DockPanel.Dock="Top" Content="Рассчитать" Command="{Binding Start}"/>
-
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Результаты">
-                    <StackPanel Margin="5, 5, 5, 5">
-                        <TextBox IsReadOnly="True"
-                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="62"/>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
             <StackPanel Margin="5,0,5,0">
                 <TextBlock Text="Описание задачи: "></TextBlock>
-                <TextBlock Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="300" Height="440"></TextBlock>
+                <TextBlock Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="380"></TextBlock>
             </StackPanel>
         </StackPanel>
     </StackPanel>
