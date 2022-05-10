@@ -25,12 +25,18 @@ namespace User.Model
         private double N;
         public void RegisterTask(List<TaskParameterValueView> parameter)
         {
-            this.a = parameter.Where(x=>x.Notation == "α").Select(el=>el.Value).Single();
-            this.β = parameter.Where(x => x.Notation == "β").Select(el => el.Value).Single();
-            this.y = parameter.Where(x => x.Notation == "γ").Select(el => el.Value).Single();
-            this.p1 = parameter.Where(x => x.Notation == "∆р1").Select(el => el.Value).Single();
-            this.p2 = parameter.Where(x => x.Notation == "∆р2").Select(el => el.Value).Single();
-            this.N = parameter.Where(x => x.Notation == "N").Select(el => el.Value).Single();
+            this.a = parameter.Where(x=>x.Notation == "α" && x.TaskName == Name)
+                .Select(el=>el.Value).Single();
+            this.β = parameter.Where(x => x.Notation == "β" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.y = parameter.Where(x => x.Notation == "γ" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.p1 = parameter.Where(x => x.Notation == "∆р1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.p2 = parameter.Where(x => x.Notation == "∆р2" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.N = parameter.Where(x => x.Notation == "N" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
         }
         public double GetTask(Point2 point)
         {
@@ -50,12 +56,18 @@ namespace User.Model
         private double N;
         public void RegisterTask(List<TaskParameterValueView> parameter)
         {
-            this.a = parameter.Where(x => x.Notation == "α").Select(el => el.Value).Single();
-            this.β = parameter.Where(x => x.Notation == "β").Select(el => el.Value).Single();
-            this.μ = parameter.Where(x => x.Notation == "γ").Select(el => el.Value).Single();
-            this.A = parameter.Where(x => x.Notation == "A").Select(el => el.Value).Single();
-            this.G = parameter.Where(x => x.Notation == "G").Select(el => el.Value).Single();
-            this.N = parameter.Where(x => x.Notation == "N").Select(el => el.Value).Single();
+            this.a = parameter.Where(x => x.Notation == "α" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.β = parameter.Where(x => x.Notation == "β" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.μ = parameter.Where(x => x.Notation == "γ" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.A = parameter.Where(x => x.Notation == "A" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.G = parameter.Where(x => x.Notation == "G" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.N = parameter.Where(x => x.Notation == "N" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
         }
         public double GetTask(Point2 point)
         {
