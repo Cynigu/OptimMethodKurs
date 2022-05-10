@@ -27,13 +27,11 @@ namespace User.Model
         {
             throw new System.NotImplementedException();
         }
-
         public void RegisterMethod(bool max, double k, double b, string sing, double xmin, double xmax, double ymin, double ymax,
             double ε, task task)
         {
             throw new System.NotImplementedException();
         }
-
         public ObservableCollection<Point3> GetChartData()
         {
             throw new System.NotImplementedException();
