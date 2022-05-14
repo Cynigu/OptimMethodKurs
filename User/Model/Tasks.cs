@@ -46,6 +46,44 @@ namespace User.Model
             return FunctionValue;
         }
     }
+
+    internal class RegisterTask12 : ITask
+    {
+        public string? Name { get; } = "Вариант 12";
+        private double a;
+        private double β;
+        private double y;
+        private double A1;
+        private double A2;
+        private double V1;
+        private double V2;
+        public void RegisterTask(List<TaskParameterValueView> parameter)
+        {
+            this.a = parameter.Where(x => x.Notation == "α" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.β = parameter.Where(x => x.Notation == "β" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.y = parameter.Where(x => x.Notation == "γ" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.A1 = parameter.Where(x => x.Notation == "A1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.A2 = parameter.Where(x => x.Notation == "A2" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.V1 = parameter.Where(x => x.Notation == "V1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.V2 = parameter.Where(x => x.Notation == "V2" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+        }
+        public double GetTask(Point2 point)
+        {
+            //С  =  α * (Т2– Т1)^А1 + β * 1 /  V1 * (Т1+Т2 -  γ *V2)^A2
+            double FunctionValue = a * Math.Pow(point.Y - point.X, A1) 
+                                   + β * 1 / V1 
+                                   * Math.Pow(point.X + point.Y - y * V2, A2 );
+            return FunctionValue;
+        }
+    }
+
     internal class RegisterTask18: ITask
     {
         public string? Name { get; } = "Вариант 18";
@@ -115,7 +153,8 @@ namespace User.Model
         { 
             new RegisterTask15(), 
             new RegisterTask18(),
-            new RegisterTask13()
+            new RegisterTask13(),
+            new RegisterTask12()
         };
     }
 }
