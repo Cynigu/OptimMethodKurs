@@ -21,7 +21,10 @@ namespace AutofacWpfDependences
                 c.Resolve<IUnitOfMeasService>()))
                 .AsSelf();
 
-            builder.RegisterType<UserViewModel>().AsSelf();
+            builder.Register(c => new UserViewModel(
+                    c.Resolve<ITasksService>(),
+                    c.Resolve<IMethodService>()))
+                .AsSelf();
         }
     }
 }

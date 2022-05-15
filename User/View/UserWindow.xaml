@@ -199,12 +199,14 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Значение" Width="60"></TextBlock>
-                                <wpfx:DoubleUpDown x:Name="textBoxValue" Width="60" Text="{Binding ParameterByTaskValue}"></wpfx:DoubleUpDown>
+                                <wpfx:DoubleUpDown x:Name="textBoxValue" Width="60" Value="{Binding ParameterByTaskValue}"></wpfx:DoubleUpDown>
                             </StackPanel>
-                            <Button Content="Изменить" Command="{Binding ChangeValue}" Height="23" Margin="3,0,0,0"></Button>
+                            <Button Content="Изменить" Command="{Binding ChangeValueCommand}" Height="23" Margin="3,0,0,0"></Button>
                         </StackPanel>
                         <StackPanel>
-                            <DataGrid Width="500" Height="340">
+                            <DataGrid Width="500" Height="340" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedParameter}"
+                                      CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True">
 
                             </DataGrid>
                         </StackPanel>

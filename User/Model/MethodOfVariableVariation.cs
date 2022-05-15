@@ -87,8 +87,6 @@ internal class MethodOfVariableVariation: IMethod
             // Предыдущая точка экстремума
             prewExtrPoint = extremPoint.Clone();
 
-            
-
             // 2) Получение интервала переменной, подозрительного на экстремум по Х
             var (intervalPointByX1, intervalPointByX2) = GetIntervalExtrByChangeX(extremPoint);
 
@@ -134,12 +132,17 @@ internal class MethodOfVariableVariation: IMethod
                         upPoint.X = extremPoint.X + stepX;
                         upPoint.Y = k * upPoint.X + b;
                         upPoint.FunctionValue = task(upPoint);
+
+                        // Провекрка что не вышли за ограничения 1ого рода
+                        if (!CheckConditionFirstKind(extremPoint.X, extremPoint.Y))
+                        {
+                            break;
+                        }
                     }
 
                     var intervalLimitSecond1 = extremPoint.Clone();
                     var intervalLimitSecond2 = upPoint.Clone();
                     extremPoint = GoldenRatioMethod(intervalLimitSecond1, intervalLimitSecond2);
-                    continue;
                 }
 
                 var downPoint = new Point2();
@@ -155,12 +158,31 @@ internal class MethodOfVariableVariation: IMethod
                         downPoint.X = extremPoint.X + stepX;
                         downPoint.Y = k * downPoint.X + b;
                         downPoint.FunctionValue = task(downPoint);
+                        // Провекрка что не вышли за ограничения 1ого рода
+                        if (!CheckConditionFirstKind(extremPoint.X, extremPoint.Y))
+                        {
+                            break;
+                        }
                     }
 
                     var intervalLimitSecond1 = extremPoint.Clone();
                     var intervalLimitSecond2 = downPoint.Clone();
                     extremPoint = GoldenRatioMethod(intervalLimitSecond1, intervalLimitSecond2);
-                    continue;
+                }
+
+                // Провекрка что не вышли за ограничения 1ого рода
+                if (!CheckConditionFirstKind(extremPoint.X, extremPoint.Y))
+                {
+                    if (extremPoint.X > xmax)
+                        extremPoint.X = xmax;
+                    else if (extremPoint.X < xmin)
+                        extremPoint.X = xmin;
+
+                    if (extremPoint.Y > ymax)
+                        extremPoint.Y = ymax;
+                    else if (extremPoint.Y < ymin)
+                        extremPoint.Y = ymin;
+                    extremPoint.FunctionValue = task(extremPoint);
                 }
             }
 
@@ -317,7 +339,11 @@ internal class MethodOfVariableVariation: IMethod
             var intervalPoint1 = point.Clone();
             return (intervalPoint2, intervalPoint1);
         }
-        return (point, point);
+        var point1 = point.Clone();
+        point1.X -= stepX;
+        var point2 = point.Clone();
+        point2.X += stepX;
+        return (point1, point2);
     }
 
     /// <summary>
@@ -328,6 +354,7 @@ internal class MethodOfVariableVariation: IMethod
     private (Point2 intervalPoint1, Point2 intervalPoint2) GetIntervalExtrByChangeY(Point2 startPoint)
     {
         var point = startPoint.Clone();
+
         if ((point.FunctionValue < task(new Point2()
             {
                 X = point.X,
@@ -416,7 +443,11 @@ internal class MethodOfVariableVariation: IMethod
         }
         else
         {
-            return (point, point);
+            var point1 = point.Clone();
+            point1.Y -= stepY;
+            var point2 = point.Clone();
+            point2.Y += stepY;
+            return (point1, point2);
         }
     }
 }

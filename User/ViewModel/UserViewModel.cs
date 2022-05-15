@@ -21,6 +21,9 @@ namespace User.ViewModel
 {
     public class UserViewModel : ReactiveObject
     {
+        private readonly ITasksService taskservice;
+        private readonly IMethodService methodservice;
+
         #region поля
         private ObservableCollection<string> listSing;
         private ObservableCollection<string> listExtremum;
@@ -53,9 +56,41 @@ namespace User.ViewModel
         private double pointOfStartY;
         private double stepForMethodY;
         private double stepForMethodX;
+        private ObservableCollection<TaskParameterValueView>? parametersTable;
+        private TaskParameterValueView ? selectedParameter;
+        private double? parameterByTaskValue;
         #endregion
 
         #region get; set
+
+        public ObservableCollection<TaskParameterValueView>? ParametersTable
+        {
+            get => parametersTable;
+            set => this.RaiseAndSetIfChanged(ref parametersTable, value);
+        }
+
+        public TaskParameterValueView? SelectedParameter
+        {
+            get => selectedParameter;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref selectedParameter, value);
+                if (selectedParameter != null)
+                {
+                    ParameterByTaskValue = selectedParameter.Value;
+                }
+                else
+                {
+                    ParameterByTaskValue = null;
+                }
+            }
+        }
+
+        public double? ParameterByTaskValue
+        {
+            get => parameterByTaskValue;
+            set => this.RaiseAndSetIfChanged(ref parameterByTaskValue, value);
+        }
         public double StepForMethodX
         {
             get => stepForMethodX;
@@ -193,9 +228,11 @@ namespace User.ViewModel
                 if (currentTask != null)
                 {
                     DescriptionTask = currentTask.Description;
+                    ParametersTable = new ObservableCollection<TaskParameterValueView>(taskservice.GetParametersByTaskId(currentTask.IdTask));
                 }
                 else
                 {
+                    ParametersTable = null;
                     DescriptionTask = null;
                 }
             }
@@ -223,7 +260,7 @@ namespace User.ViewModel
         #endregion
 
         #region конструкторы
-        public UserViewModel()
+        public UserViewModel(ITasksService taskService, IMethodService metService)
         {
             GetlistSing = new() { ">", "<", "⩾", "⩽" };
             GetlistExtremum = new() { "локальный максимум", "локальный минимум" };
@@ -237,11 +274,8 @@ namespace User.ViewModel
             Getymax = 3;
             Getε = 0.01;
             GetfunctionValue = new();
-            ContainerBuilder builderBase = new();
-            builderBase.RegisterModule(new RepositoryModule());
-            var sql = builderBase.Build().Resolve<ISqlLiteRepositoryContextFactory>();
-            ITasksService taskservice = new TasksService(sql);
-            IMethodService methodservice = new MethodService(sql);
+            taskservice = taskService;
+            methodservice = metService;
             Gettasks = new (taskservice.GetAllTask());
             GetcurrentTask = Gettasks[0];
             Getmethods = new (methodservice.GetAllOptimizationMethods().Where(x=>x.IsRealized == true).Select(el=>el));
@@ -253,6 +287,10 @@ namespace User.ViewModel
             PointOfStartY = 3;
             StepForMethodX = 0.05;
             StepForMethodY = 0.05;
+
+            ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
+                obj => SelectedParameter != null && ParameterByTaskValue != null
+                );
         }
         #endregion
 
@@ -264,6 +302,7 @@ namespace User.ViewModel
         private RelayCommand taskDescription;
         private RelayCommand reference;
         private RelayCommand saveresult;
+        public RelayCommand ChangeValueCommand { get; set; }
         public ICommand Start
         {
             get
@@ -284,8 +323,15 @@ namespace User.ViewModel
                                 if (method.Name == currentMethod.Name) 
                                 {
                                     GetfunctionValue.Clear();
-                                    var parameters = taskParameters.Where(x => x.TaskId == currentTask.IdTask).Select(el => el).ToList();
-                                    task.RegisterTask(parameters);
+                                    if (ParametersTable != null)
+                                    {
+                                        var parameters = ParametersTable.ToList();
+                                        task.RegisterTask(parameters);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Задача описана неккоректно");
+                                    }
                                     try
                                     {
                                         if (Getextremum == "локальный максимум")
@@ -310,9 +356,10 @@ namespace User.ViewModel
                                     GetfunctionValue[0].X = Math.Round(GetfunctionValue[0].X, count);
                                     GetfunctionValue[0].Y = Math.Round(GetfunctionValue[0].Y, count);
                                     GetfunctionValue[0].FunctionValue = Math.Round(GetfunctionValue[0].FunctionValue, count);
-                                    Getresult = $"X = {GetfunctionValue[0].X}\n" +
+                                    Getresult = $"Точки:\n" + 
+                                                $"X = {GetfunctionValue[0].X}\n" +
                                                 $"Y = {GetfunctionValue[0].Y}\n" +
-                                                $"Значение целевой функции в точке\n" +
+                                                $"ЦФ:\n" +
                                                 $"F(X, Y) = {GetfunctionValue[0].FunctionValue}";
                                     try
                                     {
@@ -455,6 +502,20 @@ namespace User.ViewModel
 
         #region Methods
 
+        private void ChangeValue()
+        {
+            try
+            {
+                if (SelectedParameter != null)
+                    SelectedParameter.Value =
+                        ParameterByTaskValue ?? throw new ArgumentException("Значение не введено!");
+                ParametersTable = new ObservableCollection<TaskParameterValueView>(ParametersTable);
+            }
+            catch (ArgumentException e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
         private ObservableCollection<Point3> GetChartData(task task, double stepX, double stepY)
         {
             if (stepX <= 0 || stepY <= 0)
@@ -524,8 +585,15 @@ namespace User.ViewModel
             {
                 if (task.Name == currentTask.Name)
                 {
-                    var parameters = taskParameters.Where(x => x.TaskId == currentTask.IdTask).Select(el => el).ToList();
-                    task.RegisterTask(parameters);
+                    if (ParametersTable != null)
+                    {
+                        var parameters = ParametersTable.ToList();
+                        task.RegisterTask(parameters);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Задача описана неккоректно!");
+                    }
                     try
                     {
                         Getchart3Ddata = GetChartData(task.GetTask, StepGraphX, StepGraphY);
