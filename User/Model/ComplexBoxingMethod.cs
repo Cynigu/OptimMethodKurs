@@ -243,7 +243,8 @@ internal class ComplexBoxingMethod: IMethod
     }
     public void RegisterMethod(bool max, double k, double b, string sing,
         double xmin, double xmax, double ymin, double ymax, double ε, task task,
-        double? x0 = null, double? y0 = null)
+        double? x0 = null, double? y0 = null,
+        double? stepX = null, double? stepY = null)
     {
         this.pointFbest = new();
         this.pointFworst = new();

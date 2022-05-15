@@ -103,6 +103,19 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
+            <!--<GroupBox Header="Шаги" 
+                      Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel >
+                    <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Top">
+                        <TextBlock Text="X: " Width="20"></TextBlock>
+                        <wpfx:DoubleUpDown Value="{Binding StepForMethodX}"></wpfx:DoubleUpDown>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <TextBlock Text="Y: " Width="20"></TextBlock>
+                        <wpfx:DoubleUpDown Value="{Binding StepForMethodY}"></wpfx:DoubleUpDown>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>-->
             <GroupBox Header="Выполнение" DockPanel.Dock="Top">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">

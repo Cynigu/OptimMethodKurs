@@ -51,9 +51,21 @@ namespace User.ViewModel
         private bool isVariableParametersMethod;
         private double pointOfStartX;
         private double pointOfStartY;
+        private double stepForMethodY;
+        private double stepForMethodX;
         #endregion
 
         #region get; set
+        public double StepForMethodX
+        {
+            get => stepForMethodX;
+            set => this.RaiseAndSetIfChanged(ref stepForMethodX, value);
+        }
+        public double StepForMethodY
+        {
+            get => stepForMethodY;
+            set => this.RaiseAndSetIfChanged(ref stepForMethodY, value);
+        }
         public double PointOfStartX
         {
             get => pointOfStartX;
@@ -237,8 +249,10 @@ namespace User.ViewModel
             taskParameters = new(taskservice.GetAllParametersValues());
             StepGraphX = 0.05;
             StepGraphY = 0.05;
-            PointOfStartX = 0;
-            PointOfStartY = 0;
+            PointOfStartX = -2.5;
+            PointOfStartY = 3;
+            StepForMethodX = 0.05;
+            StepForMethodY = 0.05;
         }
         #endregion
 
@@ -277,12 +291,12 @@ namespace User.ViewModel
                                         if (Getextremum == "локальный максимум")
                                         {
                                             method.RegisterMethod(true, k, b, sing, xmin, xmax, ymin, ymax, ε, 
-                                                task.GetTask, PointOfStartX, PointOfStartY);
+                                                task.GetTask, PointOfStartX, PointOfStartY, StepForMethodX, StepForMethodY);
                                         }
                                         if (Getextremum == "локальный минимум")
                                         {
                                             method.RegisterMethod(false, k, b, sing, xmin, xmax, ymin, ymax, ε, 
-                                                task.GetTask, PointOfStartX, PointOfStartY);
+                                                task.GetTask, PointOfStartX, PointOfStartY, StepForMethodX, StepForMethodY);
                                         }
                                     }
                                     catch (ArgumentException ex)

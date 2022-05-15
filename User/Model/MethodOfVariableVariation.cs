@@ -21,15 +21,19 @@ internal class MethodOfVariableVariation: IMethod
     private double b; // b: y=kx+b
     private double x0;
     private double y0;
-
+    private double stepX;
+    private double stepY;
     public void RegisterMethod(bool max, double k, double b, string sing, double xmin, double xmax, double ymin, double ymax,
-        double ε, task task, double? x0 = null, double? y0 = null)
+        double ε, task task, 
+        double? x0 = null, double? y0 = null,
+        double? stepX = null, double? stepY = null)
     {
-        this.x0 = x0 ?? throw new ArgumentException("Должна быть исходная точка!");
-        this.x0 = y0 ?? throw new ArgumentException("Должна быть исходная точка!");
-        if (!CheckConditionFirstKind(this.x0, this.y0) || !CheckConditionSecondKind(this.x0, this.y0, sing))
-            throw new ArgumentException("Исходная точка не соответсвует ограничениям 1ого и 2ого рода!");
-
+        this.stepX = stepX != null && stepX > 0 
+            ? stepX ?? throw new ArgumentException("Введите шаг")
+            : throw new ArgumentException("Шаг должен быть больше 0");
+        this.stepY = stepY != null && stepY > 0
+            ? stepY ?? throw new ArgumentException("Введите шаг")
+            : throw new ArgumentException("Шаг должен быть больше 0");
         this.isExtremMax = max;
         this.ε = ε;
         this.task = task;
@@ -40,6 +44,10 @@ internal class MethodOfVariableVariation: IMethod
         this.ymin = ymin;
         this.k = k;
         this.b = b;
+        this.x0 = x0 ?? throw new ArgumentException("Должна быть исходная точка!");
+        this.y0 = y0 ?? throw new ArgumentException("Должна быть исходная точка!");
+        if (!CheckConditionFirstKind(this.x0, this.y0) || !CheckConditionSecondKind(this.x0, this.y0, sing))
+            throw new ArgumentException("Исходная точка не соответсвует ограничениям 1ого и(или) 2ого рода!");
     }
     private bool CheckConditionSecondKind(double x, double y, string sing)  // проверить выполнение условия 2-ого рода
     {
@@ -60,60 +68,6 @@ internal class MethodOfVariableVariation: IMethod
             return false;
         return  true;
     }
-    public ObservableCollection<Point3> GetChartData()
-    {
-        float step = 0.1f;
-        ObservableCollection<Point3> chart3dData = new();
-        for (float i = ((float)xmin); i < xmax; i += step)
-        {
-            for (float j = ((float)ymin); j < ymax; j += step)
-            {
-                chart3dData.Add(new Point3 { X = i, Y = j, Z = (float)task(new Point2 { X = i, Y = j }) });
-            }
-        }
-        return chart3dData;
-    }
-    public ObservableCollection<Point2> GetChartLimitationData()
-    {
-        ObservableCollection<Point2> limitationData = new();
-        ObservableCollection<Point2> points = new();
-        double yXmin = k * xmin + b;
-        double yXmax = k * xmax + b;
-        double xYmin = (ymin - b) / k;
-        double xYmax = (ymax - b) / k;
-
-        if (ymin <= yXmax && yXmax <= ymax)
-        {
-            limitationData.Add(new Point2 { X = xmax, Y = yXmax });
-        }
-        if (xmin <= xYmax && xYmax <= xmax)
-        {
-            limitationData.Add(new Point2 { X = xYmax, Y = ymax });
-        }
-        if (ymin <= yXmin && yXmin <= ymax)
-        {
-            limitationData.Add(new Point2 { X = xmin, Y = yXmin });
-        }
-        if (xmin <= xYmin && xYmin <= xmax)
-        {
-            limitationData.Add(new Point2 { X = xYmin, Y = ymin });
-        }
-        return limitationData;
-    }
-    public List<List<Point3>> GetChartDataAsTable()
-    {
-        float step = 0.5f;
-        List<List<Point3>> data = new(); int row = 0;
-        for (float i = ((float)xmin); i < xmax; i += step, row++)
-        {
-            data.Add(new());
-            for (float j = ((float)ymin); j < ymax; j += step)
-            {
-                data[row].Add(new Point3 { X = i, Y = j, Z = (float)task(new Point2 { X = i, Y = j }) });
-            }
-        }
-        return data;
-    }
 
     public Point2 Solve()
     {
@@ -133,6 +87,8 @@ internal class MethodOfVariableVariation: IMethod
             // Предыдущая точка экстремума
             prewExtrPoint = extremPoint.Clone();
 
+            
+
             // 2) Получение интервала переменной, подозрительного на экстремум по Х
             var (intervalPointByX1, intervalPointByX2) = GetIntervalExtrByChangeX(extremPoint);
 
@@ -147,6 +103,66 @@ internal class MethodOfVariableVariation: IMethod
             // 3) выбор метода локализации экстремума в найденном интервале
             // (метода одномерного поиска - золотое сечение);
             extremPoint = GoldenRatioMethod(intervalPointByY2, intervalPointByY1);
+            // Провекрка что не вышли за ограничения 1ого рода
+            if (!CheckConditionFirstKind(extremPoint.X, extremPoint.Y))
+            {
+                if(extremPoint.X > xmax)
+                    extremPoint.X = xmax;
+                else if(extremPoint.X < xmin)
+                    extremPoint.X = xmin;
+
+                if (extremPoint.Y > ymax)
+                    extremPoint.Y = ymax;
+                else if (extremPoint.Y < ymin)
+                    extremPoint.Y = ymin;
+                extremPoint.FunctionValue = task(extremPoint);
+            }
+
+            // Если предыдущая точка находится на границе 2ого рода, то искать екстремум нужно на этой границе
+            if (Math.Abs(extremPoint.Y - (k * extremPoint.X + b)) < 0.02)
+            {
+                var upPoint = new Point2();
+                upPoint.X = extremPoint.X + stepX;
+                upPoint.Y = k * upPoint.X + b;
+                upPoint.FunctionValue = task(upPoint);
+
+                if ((upPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                {
+                    while ((upPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                    {
+                        extremPoint = upPoint.Clone();
+                        upPoint.X = extremPoint.X + stepX;
+                        upPoint.Y = k * upPoint.X + b;
+                        upPoint.FunctionValue = task(upPoint);
+                    }
+
+                    var intervalLimitSecond1 = extremPoint.Clone();
+                    var intervalLimitSecond2 = upPoint.Clone();
+                    extremPoint = GoldenRatioMethod(intervalLimitSecond1, intervalLimitSecond2);
+                    continue;
+                }
+
+                var downPoint = new Point2();
+                downPoint.X = extremPoint.X - stepX;
+                downPoint.Y = k * downPoint.X + b;
+                downPoint.FunctionValue = task(downPoint);
+
+                if ((downPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                {
+                    while ((downPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                    {
+                        extremPoint = downPoint.Clone();
+                        downPoint.X = extremPoint.X + stepX;
+                        downPoint.Y = k * downPoint.X + b;
+                        downPoint.FunctionValue = task(downPoint);
+                    }
+
+                    var intervalLimitSecond1 = extremPoint.Clone();
+                    var intervalLimitSecond2 = downPoint.Clone();
+                    extremPoint = GoldenRatioMethod(intervalLimitSecond1, intervalLimitSecond2);
+                    continue;
+                }
+            }
 
         } while (Math.Abs(extremPoint.FunctionValue-prewExtrPoint.FunctionValue) > ε);
 
@@ -213,81 +229,95 @@ internal class MethodOfVariableVariation: IMethod
     private (Point2 intervalPoint1, Point2 intervalPoint2) GetIntervalExtrByChangeX(Point2 startPoint)
     {
         // Выбор величины шага поиска
-        double step = 0.05;
+        var point = startPoint.Clone();
 
-        var prewPoint = startPoint.Clone();
-        Point2 newPoint = new Point2()
-        {
-            X = prewPoint.X + step,
-            Y = prewPoint.Y,
-        };
-        newPoint.FunctionValue = task(newPoint);
-
-        if ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+        if ((point.FunctionValue < task(new Point2()
+            {
+                X = point.X + stepX,
+                Y = point.Y
+            })) == isExtremMax)
         {
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
-            while ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+            while ((point.FunctionValue < task(new Point2()
+                   {
+                       X = point.X + stepX,
+                       Y = point.Y
+                   })) == isExtremMax)
             {
-                prewPoint = newPoint.Clone();
-                newPoint = new Point2()
+                point.X += stepX;
+                point.FunctionValue = task(point);
+                if (!CheckConditionFirstKind(point.X, point.Y)
+                    || !CheckConditionSecondKind(point.X, point.Y, sing))
                 {
-                    X = prewPoint.X + step,
-                    Y = prewPoint.Y
-                };
-                newPoint.FunctionValue = task(newPoint);
-                if (!CheckConditionFirstKind(newPoint.X, newPoint.Y)
-                    || !CheckConditionSecondKind(newPoint.X, newPoint.Y, sing))
-                {
-                    newPoint = prewPoint.Clone();
+                    // Провекрка что не вышли за ограничения 2ого рода
+                    if (!CheckConditionSecondKind(point.X, point.Y, sing))
+                    {
+                        point.X = (b - point.Y) / k;
+                        point.FunctionValue = task(point);
+                    }
                     break;
                 }
             }
+
+            point.X += stepX;
+            point.FunctionValue = task(point);
+
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
 
             // Левая границы интервала (в два шага в противоположнос направлении) 
-            var intervalPoint1 = newPoint.Clone();
-            intervalPoint1.X -= 2 * step;
+            var intervalPoint1 = point.Clone();
+            intervalPoint1.X -= 2 * stepX;
             intervalPoint1.FunctionValue = task(intervalPoint1);
 
             // правая граница
-            var intervalPoint2 = newPoint.Clone();
+            var intervalPoint2 = point.Clone();
             return (intervalPoint1, intervalPoint2);
         }
-        else
+        else if((point.FunctionValue < task(new Point2()
+                {
+                    X = point.X - stepX,
+                    Y = point.Y
+                })) == isExtremMax)
         {
-            newPoint.X -= 2 * step;
-            newPoint.FunctionValue = task(newPoint);
-            while ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+            while ((point.FunctionValue < task(new Point2()
+                   {
+                       X = point.X - stepX,
+                       Y = point.Y
+                   })) == isExtremMax)
             {
-                prewPoint = newPoint.Clone();
-                newPoint = new Point2()
+                point.X -= stepX;
+                point.FunctionValue = task(point);
+                if (!CheckConditionFirstKind(point.X, point.Y)
+                    || !CheckConditionSecondKind(point.X, point.Y, sing))
                 {
-                    X = prewPoint.X - step,
-                    Y = prewPoint.Y
-                };
-                newPoint.FunctionValue = task(newPoint);
-                if (!CheckConditionFirstKind(newPoint.X, newPoint.Y)
-                    || !CheckConditionSecondKind(newPoint.X, newPoint.Y, sing))
-                {
-                    newPoint = prewPoint.Clone();
+                    // Провекрка что не вышли за ограничения 2ого рода
+                    if (!CheckConditionSecondKind(point.X, point.Y, sing))
+                    {
+                        point.X = (b - point.Y) / k;
+                        point.FunctionValue = task(point);
+                    }
                     break;
                 }
             }
+
+            point.X -= stepX;
+            point.FunctionValue = task(point);
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
 
             // Левая границы интервала (в два шага в противоположнос направлении) 
-            var intervalPoint2 = newPoint.Clone();
-            intervalPoint2.X += 2 * step;
+            var intervalPoint2 = point.Clone();
+            intervalPoint2.X += 2 * stepX;
             intervalPoint2.FunctionValue = task(intervalPoint2);
 
             // правая граница
-            var intervalPoint1 = newPoint.Clone();
-            return (intervalPoint1, intervalPoint2);
+            var intervalPoint1 = point.Clone();
+            return (intervalPoint2, intervalPoint1);
         }
+        return (point, point);
     }
 
     /// <summary>
@@ -297,81 +327,96 @@ internal class MethodOfVariableVariation: IMethod
     /// <returns></returns>
     private (Point2 intervalPoint1, Point2 intervalPoint2) GetIntervalExtrByChangeY(Point2 startPoint)
     {
-        // Выбор величины шага поиска
-        double step = 0.05;
-
-        var prewPoint = startPoint.Clone();
-        Point2 newPoint = new Point2()
-        {
-            X = prewPoint.X,
-            Y = prewPoint.Y + step,
-        };
-        newPoint.FunctionValue = task(newPoint);
-        if ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+        var point = startPoint.Clone();
+        if ((point.FunctionValue < task(new Point2()
+            {
+                X = point.X,
+                Y = point.Y + stepY
+        })) == isExtremMax)
         {
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
-            while ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+            while ((point.FunctionValue < task(new Point2()
+                   {
+                       X = point.X ,
+                       Y = point.Y + stepY
+            })) == isExtremMax)
             {
-                prewPoint = newPoint.Clone();
-                newPoint = new Point2()
+
+                point.Y += stepY;
+                point.FunctionValue = task(point);
+                if (!CheckConditionFirstKind(point.X, point.Y)
+                    || !CheckConditionSecondKind(point.X, point.Y, sing))
                 {
-                    X = prewPoint.X,
-                    Y = prewPoint.Y + step
-                };
-                newPoint.FunctionValue = task(newPoint);
-                if (!CheckConditionFirstKind(newPoint.X, newPoint.Y)
-                    || !CheckConditionSecondKind(newPoint.X, newPoint.Y, sing))
-                {
-                    newPoint = prewPoint.Clone();
+                    //// Провекрка что не вышли за ограничения 2ого рода
+                    if (!CheckConditionSecondKind(point.X, point.Y, sing))
+                    {
+                        point.Y = k * point.X + b;
+                        point.FunctionValue = task(point);
+                    }
                     break;
                 }
             }
+
+            point.Y += stepY;
+            point.FunctionValue = task(point);
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
 
             // Левая границы интервала (в два шага в противоположнос направлении) 
-            var intervalPoint1 = newPoint.Clone();
-            intervalPoint1.Y -= 2 * step;
+            var intervalPoint1 = point.Clone();
+            intervalPoint1.Y -= 2 * stepY;
             intervalPoint1.FunctionValue = task(intervalPoint1);
 
             // правая граница
-            var intervalPoint2 = newPoint.Clone();
+            var intervalPoint2 = point.Clone();
             return (intervalPoint1, intervalPoint2);
         }
-        else
+        else if((point.FunctionValue < task(new Point2()
+                {
+                    X = point.X ,
+                    Y = point.Y - stepY
+        })) == isExtremMax)
         {
-            newPoint.Y -= 2 * step;
-            newPoint.FunctionValue = task(newPoint);
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
-            while ((prewPoint.FunctionValue < newPoint.FunctionValue) == isExtremMax)
+            while ((point.FunctionValue < task(new Point2()
+                   {
+                       X = point.X ,
+                       Y = point.Y - stepY
+            })) == isExtremMax)
             {
-                prewPoint = newPoint.Clone();
-                newPoint = new Point2()
+                point.Y -= stepY;
+                point.FunctionValue = task(point);
+                if (!CheckConditionFirstKind(point.X, point.Y)
+                    || !CheckConditionSecondKind(point.X, point.Y, sing))
                 {
-                    X = prewPoint.X,
-                    Y = prewPoint.Y - step
-                };
-                newPoint.FunctionValue = task(newPoint);
-                if (!CheckConditionFirstKind(newPoint.X, newPoint.Y)
-                    || !CheckConditionSecondKind(newPoint.X, newPoint.Y, sing))
-                {
-                    newPoint = prewPoint.Clone();
+                    // Провекрка что не вышли за ограничения 2ого рода
+                    if (!CheckConditionSecondKind(point.X, point.Y, sing))
+                    {
+                        point.Y = k * point.X + b;
+                        point.FunctionValue = task(point);
+                    }
                     break;
                 }
             }
+            point.Y -= stepY;
+            point.FunctionValue = task(point);
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
 
             // Левая границы интервала (в два шага в противоположнос направлении) 
-            var intervalPoint2 = newPoint.Clone();
-            intervalPoint2.Y += 2 * step;
+            var intervalPoint2 = point.Clone();
+            intervalPoint2.Y += 2 * stepY;
             intervalPoint2.FunctionValue = task(intervalPoint2);
 
             // правая граница
-            var intervalPoint1 = newPoint.Clone();
-            return (intervalPoint1, intervalPoint2);
+            var intervalPoint1 = point.Clone();
+            return (intervalPoint2, intervalPoint1);
+        }
+        else
+        {
+            return (point, point);
         }
     }
 }
