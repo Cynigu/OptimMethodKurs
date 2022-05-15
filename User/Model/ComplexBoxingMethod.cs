@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace User.Model;
 
+/// <summary>
+///  Метод Бокса для функции 2х переменных
+/// </summary>
 internal class ComplexBoxingMethod: IMethod
 {
     public string? Name { get; } = "Комплекс-метод Бокса";
@@ -239,7 +242,8 @@ internal class ComplexBoxingMethod: IMethod
         while (true);
     }
     public void RegisterMethod(bool max, double k, double b, string sing,
-        double xmin, double xmax, double ymin, double ymax, double ε, task task)
+        double xmin, double xmax, double ymin, double ymax, double ε, task task,
+        double? x0 = null, double? y0 = null)
     {
         this.pointFbest = new();
         this.pointFworst = new();
