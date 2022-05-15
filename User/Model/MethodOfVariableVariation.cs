@@ -82,6 +82,7 @@ internal class MethodOfVariableVariation: IMethod
 
         Point2 extremPoint = startPoint.Clone();
         Point2 prewExtrPoint;
+        
         do
         {
             // Предыдущая точка экстремума
