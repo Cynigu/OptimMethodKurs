@@ -295,6 +295,7 @@ namespace User.ViewModel
                     XName = selectedTaskRealised.X;
                     YName = selectedTaskRealised.Y;
                     CFName = selectedTaskRealised.CF;
+                    Getsing = selectedTaskRealised.sing;
                 }
                 else
                 {

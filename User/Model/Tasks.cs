@@ -100,7 +100,6 @@ namespace User.Model
             return FunctionValue * t;
         }
     }
-
     internal class RegisterTask12 : ITask
     {
         public string Name { get; } = "Вариант 12";
@@ -174,7 +173,6 @@ namespace User.Model
             return FunctionValue * t;
         }
     }
-
     internal class RegisterTask13: ITask
     {
         private double a;
@@ -244,7 +242,86 @@ namespace User.Model
                 .Select(el => el.Value).Single();
         }
     }
-    
+    internal class RegisterTask14 : ITask
+    {
+        public string Name { get; } = "Вариант 14";
+        public string UnitOfMeasCF { get; } = "кг";
+        public string SourceImageFormDesc { get; } = "var15.png";
+        public string CF { get; } = "S(A1, A2)";
+        public string X { get; } = "A1";
+        public string Y { get; } = "A2";
+        public double Xmin { get; private set; }
+        public double Xmax { get; private set; }
+        public double Ymin { get; private set; }
+        public double Ymax { get; private set; }
+        public double k { get; private set; }
+        public double b { get; private set; }
+        public double ε { get; private set; }
+        public bool IsExtremMax { get; set; } = true;
+        public string sing { get; set; } = "⩽";
+
+        private double a;
+        private double a1;
+        private double β;
+        private double β1;
+        private double y;
+        private double y1;
+        private double V1;
+        private double V2;
+        private double N;
+        private double t;
+        public void RegisterTask(List<TaskParameterValueView> parameters)
+        {
+            if (parameters.Count == 0)
+            {
+                throw new ArgumentException("В базе данных нет параметров для этой задачи!");
+            }
+            this.a = parameters.Where(x => x.Notation == "α" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.β = parameters.Where(x => x.Notation == "β" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.y = parameters.Where(x => x.Notation == "γ" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.a = parameters.Where(x => x.Notation == "α1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.β = parameters.Where(x => x.Notation == "β1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.y = parameters.Where(x => x.Notation == "γ1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.V1 = parameters.Where(x => x.Notation == "V1" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.V2 = parameters.Where(x => x.Notation == "V2" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.N = parameters.Where(x => x.Notation == "N" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+
+            this.t = parameters.Where(x => x.Notation == "t" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.Xmin = parameters.Where(x => x.Notation == "A1min" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.Xmax = parameters.Where(x => x.Notation == "A1max" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.Ymin = parameters.Where(x => x.Notation == "A2min" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.Ymax = parameters.Where(x => x.Notation == "A2max" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.k = parameters.Where(x => x.Notation == "k" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.b = parameters.Where(x => x.Notation == "b" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+            this.ε = parameters.Where(x => x.Notation == "ε" && x.TaskName == Name)
+                .Select(el => el.Value).Single();
+        }
+        public double GetValueCF(Point2 point)
+        {
+            //С  =α (A1^2 +β A2 – µV1)^ N + α1(β1A1 + A2^2 – µ1V2)^N,
+            var px = point.X;
+            var py = point.Y;
+            double FunctionValue = a * Math.Pow( (Math.Pow(px,2) - β*py- y*V1), N)
+                                   + a1* Math.Pow((β1*px + Math.Pow(py, 2) - y1*V2), N);
+            return FunctionValue * t;
+        }
+    }
     internal class Tasklist
     {
         private readonly List<ITask> tasks;
@@ -255,6 +332,7 @@ namespace User.Model
             tasks.Add(new RegisterTask15());
             tasks.Add(new RegisterTask13());
             tasks.Add(new RegisterTask12());
+            tasks.Add(new RegisterTask14());
         }
     }
 }
