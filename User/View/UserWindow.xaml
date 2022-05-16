@@ -7,7 +7,7 @@
         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
-        Title="Окно исследователя" Height="600" Width="1020" WindowStartupLocation="CenterScreen" >
+        Title="Окно исследователя" Height="700" Width="1020" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style TargetType="Button">
@@ -65,26 +65,26 @@
                         <StackPanel Orientation="Horizontal">
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
                                                Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ Х ⩾" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾ T1 ⩾" Grid.Column="1"/>
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
                                                Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
                                                Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ Y ⩾" Grid.Column="1" Grid.Row="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾ T2 ⩾" Grid.Column="1" Grid.Row="1"/>
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
                                                Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
-                            <Label HorizontalContentAlignment="Center" Content="Y"/>
+                            <Label HorizontalContentAlignment="Center" Content="T2"/>
                             <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
                                       ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                       SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
                                                Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="X +" Grid.Column="3"/>
+                            <Label HorizontalContentAlignment="Center" Content="T1 +" Grid.Column="3"/>
                             <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
                                                Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
@@ -94,11 +94,11 @@
             <GroupBox Header="Исходная точка" Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel >
                     <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Top">
-                        <TextBlock Text="X: " Width="20"></TextBlock>
+                        <TextBlock Text="T1: " Width="20"></TextBlock>
                         <wpfx:DoubleUpDown Value="{Binding PointOfStartX}"></wpfx:DoubleUpDown>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Y: " Width="20"></TextBlock>
+                        <TextBlock Text="T2: " Width="20"></TextBlock>
                         <wpfx:DoubleUpDown Value="{Binding PointOfStartY}"></wpfx:DoubleUpDown>
                     </StackPanel>
                 </StackPanel>
@@ -119,9 +119,9 @@
             <GroupBox Header="Выполнение" DockPanel.Dock="Top">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Шаг по X : "></TextBlock>
+                        <TextBlock Text="Шаг по T1 : "></TextBlock>
                         <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
-                        <TextBlock Text="Шаг по Y : "></TextBlock>
+                        <TextBlock Text="Шаг по T2 : "></TextBlock>
                         <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
                     </StackPanel>
                     <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
@@ -132,7 +132,7 @@
             </GroupBox>
             <GroupBox Header="Результаты">
                 <StackPanel>
-                    <TextBox IsReadOnly="True"
+                    <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
                         Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" Width="160"/>
                 </StackPanel>
             </GroupBox>
@@ -142,10 +142,10 @@
                 <TabControl>
                     <TabItem Header="2D график">
                         <StackPanel>
-                                <ig:XamDataChart Width="460" Height="360">
+                                <ig:XamDataChart Width="460" Height="460">
                                     <ig:XamDataChart.Axes>
-                                        <ig:NumericXAxis x:Name="xAxis" Title="Ось X"/>
-                                        <ig:NumericYAxis x:Name="yAxis" Title="Ось Y"/>
+                                        <ig:NumericXAxis x:Name="xAxis" Title="Ось T1"/>
+                                        <ig:NumericYAxis x:Name="yAxis" Title="Ось T2"/>
                                     </ig:XamDataChart.Axes>
                                     <ig:XamDataChart.Series>
                                         <ig:ScatterContourSeries 
@@ -173,17 +173,17 @@
                             </StackPanel>
                     </TabItem>
                     <TabItem Header="3D график">
-                        <ig:XamScatterSurface3D  Width="460" Height="360"
+                        <ig:XamScatterSurface3D  Width="460" Height="470"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z">
                             <ig:XamScatterSurface3D.XAxis>
-                                <ig:LinearAxis Title="Ось X"/>
+                                <ig:LinearAxis Title="Ось T1"/>
                             </ig:XamScatterSurface3D.XAxis>
                             <ig:XamScatterSurface3D.YAxis>
-                                <ig:LinearAxis Title="Ось Y"/>
+                                <ig:LinearAxis Title="Ось T2"/>
                             </ig:XamScatterSurface3D.YAxis>
                             <ig:XamScatterSurface3D.ZAxis>
-                                <ig:LinearAxis Title="Ось Z"/>
+                                <ig:LinearAxis Title="Ось V"/>
                             </ig:XamScatterSurface3D.ZAxis>
                         </ig:XamScatterSurface3D>
                     </TabItem>
@@ -192,7 +192,11 @@
             </StackPanel>
             <TabControl Margin="5,0,5,0">
                 <TabItem Header="Описание задачи">
-                    <TextBlock Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="360"></TextBlock>
+                    <StackPanel>
+                        <TextBlock Text="Формализованное описание"></TextBlock>
+                        <Image Height="200" Source="Image2.png" Stretch="Fill" Width="510"/>
+                        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="250"></TextBox>
+                    </StackPanel>
                 </TabItem>
                 <TabItem Header="Значения">
                     <StackPanel>
@@ -204,7 +208,7 @@
                             <Button Content="Изменить" Command="{Binding ChangeValueCommand}" Height="23" Margin="3,0,0,0"></Button>
                         </StackPanel>
                         <StackPanel>
-                            <DataGrid Width="500" Height="340" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
+                            <DataGrid Width="500" Height="440" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
                                       SelectedItem="{Binding SelectedParameter}"
                                       CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True">
 
