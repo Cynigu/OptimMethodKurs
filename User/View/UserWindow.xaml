@@ -54,51 +54,61 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <StackPanel>
-                <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
-                    <StackPanel>
+            <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Точность решения ε:"/>
+                        <Label HorizontalContentAlignment="Center"
+                                           Content="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" 
+                                               Content="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Точность решения ε:"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2" Grid.Row="2" Minimum="0.000001" Maximum="1"
-                                           Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
                         </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" 
+                                               Content="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                         <StackPanel Orientation="Horizontal">
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                               Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ T1 ⩾" Grid.Column="1"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                               Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="{Binding YName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                               Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            <Label HorizontalContentAlignment="Center" Content="⩾ T2 ⩾" Grid.Column="1" Grid.Row="1"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                               Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
-                        </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
+                    </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <Label HorizontalContentAlignment="Center" Content="T2"/>
-                            <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" Content="{Binding YName}"/>
+                        <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
                                       ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                       SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                               Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label HorizontalContentAlignment="Center" Content="T1 +" Grid.Column="3"/>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
-                                               Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label HorizontalContentAlignment="Center" Content="*" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="+" Grid.Column="1"/>
                         </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="4"
+                                               Content="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                </GroupBox>
-            </StackPanel>
+                </StackPanel>
+            </GroupBox>
             <GroupBox Header="Исходная точка" Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel >
                     <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Top">
-                        <TextBlock Text="T1: " Width="20"></TextBlock>
+                        <Label Content="{Binding XName}" Width="25"></Label>
                         <wpfx:DoubleUpDown Value="{Binding PointOfStartX}"></wpfx:DoubleUpDown>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="T2: " Width="20"></TextBlock>
+                        <Label Content="{Binding YName}" Width="25"></Label>
                         <wpfx:DoubleUpDown Value="{Binding PointOfStartY}"></wpfx:DoubleUpDown>
                     </StackPanel>
                 </StackPanel>
@@ -119,9 +129,11 @@
             <GroupBox Header="Выполнение" DockPanel.Dock="Top">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Шаг по T1 : "></TextBlock>
+                        <Label Content="Шаг по "></Label>
+                        <Label Content="{Binding XName}"></Label>
                         <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
-                        <TextBlock Text="Шаг по T2 : "></TextBlock>
+                        <Label Content="Шаг по "></Label>
+                        <Label Content="{Binding YName}"></Label>
                         <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
                     </StackPanel>
                     <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
@@ -144,8 +156,8 @@
                         <StackPanel>
                                 <ig:XamDataChart Width="460" Height="460">
                                     <ig:XamDataChart.Axes>
-                                        <ig:NumericXAxis x:Name="xAxis" Title="Ось T1"/>
-                                        <ig:NumericYAxis x:Name="yAxis" Title="Ось T2"/>
+                                        <ig:NumericXAxis x:Name="xAxis" Title="{Binding XName}"/>
+                                    <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
                                     </ig:XamDataChart.Axes>
                                     <ig:XamDataChart.Series>
                                         <ig:ScatterContourSeries 
@@ -177,13 +189,13 @@
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z">
                             <ig:XamScatterSurface3D.XAxis>
-                                <ig:LinearAxis Title="Ось T1"/>
+                                <ig:LinearAxis Title="{Binding XName}"/>
                             </ig:XamScatterSurface3D.XAxis>
                             <ig:XamScatterSurface3D.YAxis>
-                                <ig:LinearAxis Title="Ось T2"/>
+                                <ig:LinearAxis Title="{Binding YName}"/>
                             </ig:XamScatterSurface3D.YAxis>
                             <ig:XamScatterSurface3D.ZAxis>
-                                <ig:LinearAxis Title="Ось V"/>
+                                <ig:LinearAxis Title="{Binding CFName}"/>
                             </ig:XamScatterSurface3D.ZAxis>
                         </ig:XamScatterSurface3D>
                     </TabItem>
@@ -194,21 +206,21 @@
                 <TabItem Header="Описание задачи">
                     <StackPanel>
                         <TextBlock Text="Формализованное описание"></TextBlock>
-                        <Image Height="200" Source="Image2.png" Stretch="Fill" Width="510"/>
-                        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="250"></TextBox>
+                        <Image Height="200" Source="{Binding SourceImageFormDesc}" Stretch="Fill" Width="510" Margin="3"/>
+                        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="195"></TextBox>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Значения">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Значение" Width="60"></TextBlock>
+                                <Label Content="Значение" Width="70"></Label>
                                 <wpfx:DoubleUpDown x:Name="textBoxValue" Width="60" Value="{Binding ParameterByTaskValue}"></wpfx:DoubleUpDown>
                             </StackPanel>
                             <Button Content="Изменить" Command="{Binding ChangeValueCommand}" Height="23" Margin="3,0,0,0"></Button>
                         </StackPanel>
                         <StackPanel>
-                            <DataGrid Width="500" Height="440" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
+                            <DataGrid Width="500" Height="390" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
                                       SelectedItem="{Binding SelectedParameter}"
                                       CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True">
 

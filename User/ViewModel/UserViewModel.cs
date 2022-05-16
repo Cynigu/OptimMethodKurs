@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using User.Model.FileServices;
 using Syncfusion.XlsIO;
 using System;
+using System.Threading.Tasks;
 
 namespace User.ViewModel
 {
@@ -32,7 +33,6 @@ namespace User.ViewModel
         private ObservableCollection<Point2> chart2Ddata;
         private ObservableCollection<TaskView> tasks;
         private ObservableCollection<OptimizationMethodView> methods;
-        private ObservableCollection<TaskParameterValueView> taskParameters;
         private OptimizationMethodView currentMethod;
         private List<List<Point3>> exceldata;
         private TaskView currentTask;
@@ -59,14 +59,57 @@ namespace User.ViewModel
         private ObservableCollection<TaskParameterValueView>? parametersTable;
         private TaskParameterValueView ? selectedParameter;
         private double? parameterByTaskValue;
+        private ObservableCollection<ITask>? tasksRealised;
+        private ITask? selectedTaskRealised;
+        private string? sourceImageFormDesc;
+        private string xname;
+        private string yname;
+        private string cfname;
         #endregion
 
         #region get; set
 
+        public string XName
+        {
+            get => xname;
+            set => this.RaiseAndSetIfChanged(ref xname, value);
+        }
+        public string YName
+        {
+            get => yname;
+            set => this.RaiseAndSetIfChanged(ref yname, value);
+        }
+        public string CFName
+        {
+            get => cfname;
+            set => this.RaiseAndSetIfChanged(ref cfname, value);
+        }
         public ObservableCollection<TaskParameterValueView>? ParametersTable
         {
             get => parametersTable;
-            set => this.RaiseAndSetIfChanged(ref parametersTable, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref parametersTable, value);
+                if (parametersTable != null)
+                {
+                    if (selectedTaskRealised == null)
+                    {
+                        MessageBox.Show("Задача не найдена");
+                    }
+                    else
+                    {
+                        selectedTaskRealised.RegisterTask(parametersTable.ToList());
+                        Getε = selectedTaskRealised.ε;
+                        Getxmin = selectedTaskRealised.Xmin;
+                        Getymin = selectedTaskRealised.Ymin;
+                        Getxmax = selectedTaskRealised.Xmax;
+                        Getymax = selectedTaskRealised.Ymax;
+                        Getk = selectedTaskRealised.k;
+                        Getb = selectedTaskRealised.b;
+                    }
+                }
+
+            }
         }
 
         public TaskParameterValueView? SelectedParameter
@@ -85,7 +128,6 @@ namespace User.ViewModel
                 }
             }
         }
-
         public double? ParameterByTaskValue
         {
             get => parameterByTaskValue;
@@ -137,7 +179,11 @@ namespace User.ViewModel
             get => descriptionTask;
             set => this.RaiseAndSetIfChanged(ref descriptionTask, value);
         }
-
+        public string? SourceImageFormDesc
+        {
+            get => sourceImageFormDesc;
+            set => this.RaiseAndSetIfChanged(ref sourceImageFormDesc, value);
+        }
         public double Getk
         {
             get { return k; }
@@ -197,7 +243,7 @@ namespace User.ViewModel
         {
             get { return tasks; }
             set { this.RaiseAndSetIfChanged(ref tasks, value); }
-        }
+        } // !!
         public ObservableCollection<OptimizationMethodView> Getmethods
         {
             get { return methods; }
@@ -227,25 +273,55 @@ namespace User.ViewModel
                 this.RaiseAndSetIfChanged(ref currentTask, value);
                 if (currentTask != null)
                 {
+                    var isTask = false;
+                    foreach (var task in tasksRealised)
+                    {
+                        if (task.Name == currentTask.Name)
+                        {
+                            selectedTaskRealised = task;
+                            isTask = true;
+                            break;
+                        }
+                    }
+
+                    if (!isTask)
+                    {
+                        MessageBox.Show("Эта задача не реализована!");
+                        return;
+                    }
+                    SourceImageFormDesc = selectedTaskRealised?.SourceImageFormDesc;
                     DescriptionTask = currentTask.Description;
                     ParametersTable = new ObservableCollection<TaskParameterValueView>(taskservice.GetParametersByTaskId(currentTask.IdTask));
+                    XName = selectedTaskRealised.X;
+                    YName = selectedTaskRealised.Y;
+                    CFName = selectedTaskRealised.CF;
                 }
                 else
                 {
                     ParametersTable = null;
                     DescriptionTask = null;
+                    selectedTaskRealised = null;
                 }
             }
         }
         public string Getsing
         {
             get { return sing; }
-            set { this.RaiseAndSetIfChanged(ref sing, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref sing, value);
+                selectedTaskRealised.sing = sing;
+            }
         }
         public string Getextremum
         {
             get { return extremum; }
-            set { this.RaiseAndSetIfChanged(ref extremum, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref extremum, value);
+                if (selectedTaskRealised != null)
+                    selectedTaskRealised.IsExtremMax = extremum == "локальный максимум" ? true : false;
+            }
         }
         public string Getresult
         {
@@ -262,32 +338,39 @@ namespace User.ViewModel
         #region конструкторы
         public UserViewModel(ITasksService taskService, IMethodService metService)
         {
-            GetlistSing = new() { ">", "<", "⩾", "⩽" };
-            GetlistExtremum = new() { "локальный максимум", "локальный минимум" };
-            Getextremum = "локальный максимум";
-            Getsing = "⩾";
-            Getk = 1;
-            Getb = 2;
-            Getxmin = -3;
-            Getxmax = 0;
-            Getymin = -0.5;
-            Getymax = 3;
-            Getε = 0.01;
+            this.taskservice = taskService;
+            this.methodservice = metService;
+
+            Getmethods = new(methodservice.GetAllOptimizationMethods()
+                .Where(x => x.IsRealized == true)
+                .Select(el => el));
+            tasksRealised = new ObservableCollection<ITask>((new Tasklist()).Tasks);
+            Gettasks = new(taskservice.GetAllTask());
+            GetlistSing = new() { "⩾", "⩽" };
+            GetlistExtremum = new() {"локальный максимум", "локальный минимум"};
             GetfunctionValue = new();
-            taskservice = taskService;
-            methodservice = metService;
-            Gettasks = new (taskservice.GetAllTask());
+
             GetcurrentTask = Gettasks[0];
-            Getmethods = new (methodservice.GetAllOptimizationMethods().Where(x=>x.IsRealized == true).Select(el=>el));
             GetcurrentMethod = Getmethods[0];
-            taskParameters = new(taskservice.GetAllParametersValues());
+            Getsing = selectedTaskRealised?.sing ?? "⩾"; 
+            Getextremum = selectedTaskRealised?.IsExtremMax ?? true ? "локальный максимум" : "локальный минимум";
+            if (ParametersTable != null) selectedTaskRealised?.RegisterTask(ParametersTable.ToList());
+
+            Getk = selectedTaskRealised?.k ?? 1;
+            Getb = selectedTaskRealised?.b ?? 2;
+            Getxmin = selectedTaskRealised?.Xmin ?? -3;
+            Getxmax = selectedTaskRealised?.Xmax ?? 0;
+            Getymin = selectedTaskRealised?.Ymin ?? - 0.5;
+            Getymax = selectedTaskRealised?.Ymax ?? 3;
+            Getε = selectedTaskRealised?.ε ?? 0.01;
+
             StepGraphX = 0.05;
             StepGraphY = 0.05;
             PointOfStartX = -2.5;
             PointOfStartY = 3;
             StepForMethodX = 0.05;
             StepForMethodY = 0.05;
-
+            
             ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
                 obj => SelectedParameter != null && ParameterByTaskValue != null
                 );
@@ -314,75 +397,67 @@ namespace User.ViewModel
                         MessageBox.Show("Неверно заданы ограничения области", "Ошибка");
                         return;
                     }
-                    foreach(ITask task in Tasklist.tasks)
-                    {
-                        if(task.Name == currentTask.Name)
-                        {
-                            foreach(IMethod method in Methodlist.methods)
-                            {
-                                if (method.Name == currentMethod.Name) 
-                                {
-                                    GetfunctionValue.Clear();
-                                    if (ParametersTable != null)
-                                    {
-                                        var parameters = ParametersTable.ToList();
-                                        task.RegisterTask(parameters);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Задача описана неккоректно");
-                                    }
-                                    try
-                                    {
-                                        if (Getextremum == "локальный максимум")
-                                        {
-                                            method.RegisterMethod(true, k, b, sing, xmin, xmax, ymin, ymax, ε, 
-                                                task.GetTask, PointOfStartX, PointOfStartY, StepForMethodX, StepForMethodY);
-                                        }
-                                        if (Getextremum == "локальный минимум")
-                                        {
-                                            method.RegisterMethod(false, k, b, sing, xmin, xmax, ymin, ymax, ε, 
-                                                task.GetTask, PointOfStartX, PointOfStartY, StepForMethodX, StepForMethodY);
-                                        }
-                                    }
-                                    catch (ArgumentException ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                        return;
-                                    }
 
-                                    int count = BitConverter.GetBytes(decimal.GetBits((decimal)ε)[3])[2];
-                                    GetfunctionValue.Add(method.Solve());
-                                    GetfunctionValue[0].X = Math.Round(GetfunctionValue[0].X, count);
-                                    GetfunctionValue[0].Y = Math.Round(GetfunctionValue[0].Y, count);
-                                    GetfunctionValue[0].FunctionValue = Math.Round(GetfunctionValue[0].FunctionValue, count);
-                                    var s = Math.Round(task.GetVByT(new Point2()
-                                    {
-                                        X = GetfunctionValue[0].X,
-                                        Y = GetfunctionValue[0].Y
-                                    }), count);
-                                    Getresult = $"Точки:\n" + 
-                                                $"T1 = {GetfunctionValue[0].X}\n" +
-                                                $"T2 = {GetfunctionValue[0].Y}\n" +
-                                                $"ЦФ:\n" +
-                                                $"V(T1, T2) = {GetfunctionValue[0].FunctionValue}\n" +
-                                                $"ЦФ {task.ByObj} = {task.t}:\n" +
-                                                $"S(T1, T2) = {s}";
-                                    try
-                                    {
-                                        Getchart3Ddata = GetChartData(task.GetTask, StepGraphX, StepGraphY);
-                                        Getchart2Ddata = GetChartLimitationData();
-                                        exceldata = GetChartDataAsTable(task.GetTask, StepGraphX, StepGraphY);
-                                    }
-                                    catch (ArgumentException ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                        return;
-                                    }
+                    if (selectedTaskRealised == null)
+                    {
+                        MessageBox.Show("Не найдено решение задачи!");
+                    }
+                    foreach(IMethod method in Methodlist.methods)
+                    {
+                        if (method.Name == currentMethod.Name) 
+                        {
+                            GetfunctionValue.Clear();
+                            try
+                            {
+                                if (ParametersTable != null && selectedTaskRealised != null)
+                                    selectedTaskRealised.RegisterTask(ParametersTable.ToList());
+                                else
                                     return;
-                                }
                             }
-                            break;
+                            catch
+                            {
+                                MessageBox.Show("Значения праметров не могут быть присвоены данной функции");
+                                return;
+                            }
+
+                            try
+                            {
+                                method.RegisterMethod(selectedTaskRealised.IsExtremMax, selectedTaskRealised.k, selectedTaskRealised.b, selectedTaskRealised.sing,
+                                        selectedTaskRealised.Xmin,  selectedTaskRealised.Xmax,
+                                        selectedTaskRealised.Ymin, selectedTaskRealised.Ymax, selectedTaskRealised.ε, 
+                                        selectedTaskRealised.GetValueCF, PointOfStartX, PointOfStartY, StepForMethodX, StepForMethodY);
+
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                                return;
+                            }
+
+                            int count = BitConverter.GetBytes(decimal.GetBits((decimal)ε)[3])[2];
+                            var point = method.Solve();
+                            point.X = Math.Round(point.X, count);
+                            point.Y = Math.Round(point.Y, count);
+                            point.FunctionValue = Math.Round(point.FunctionValue, count);
+                            GetfunctionValue.Add(point);
+                            Getresult = $"Точки:\n" + 
+                                        $"{selectedTaskRealised.X} = {GetfunctionValue[0].X}\n" +
+                                        $"{selectedTaskRealised.Y}  = {GetfunctionValue[0].Y}\n" +
+                                        $"ЦФ:\n" +
+                                        $"{selectedTaskRealised.CF}  = {GetfunctionValue[0].FunctionValue} " +
+                                        $"({selectedTaskRealised.UnitOfMeasCF})";
+                            try
+                            {
+                                Getchart3Ddata = GetChartData(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
+                                Getchart2Ddata = GetChartLimitationData();
+                                exceldata = GetChartDataAsTable(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                                return;
+                            }
+                            return;
                         }
                     }
                     MessageBox.Show("Задача или метод оптимизации не найдены", "Ошибка");
@@ -417,7 +492,6 @@ namespace User.ViewModel
                   }));
             }
         }
-        
         public ICommand BuildGraphs
         {
             get
@@ -531,40 +605,46 @@ namespace User.ViewModel
             }
             //float step = 0.1f;
             ObservableCollection<Point3> chart3dData = new();
-            for (double i = (xmin); i < xmax; i += stepX)
-            {
-                for (double j = (ymin); j < ymax; j += stepY)
+            if (selectedTaskRealised != null)
+                for (double i = (selectedTaskRealised.Xmin); i < selectedTaskRealised.Xmax; i += stepX)
                 {
-                    chart3dData.Add(new Point3 { X = i, Y = j, Z = (float)task(new Point2 { X = i, Y = j }) });
+                    for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
+                    {
+                        chart3dData.Add(new Point3 {X = i, Y = j, Z = (float) task(new Point2 {X = i, Y = j})});
+                    }
                 }
-            }
+
             return chart3dData;
         }
         private ObservableCollection<Point2> GetChartLimitationData()
         {
             ObservableCollection<Point2> limitationData = new();
             ObservableCollection<Point2> points = new();
-            double yXmin = k * xmin + b;
-            double yXmax = k * xmax + b;
-            double xYmin = (ymin - b) / k;
-            double xYmax = (ymax - b) / k;
+            if (selectedTaskRealised != null)
+            {
+                double yXmin = selectedTaskRealised.k * selectedTaskRealised.Xmin + selectedTaskRealised.b;
+                double yXmax = selectedTaskRealised.k * selectedTaskRealised.Xmax + selectedTaskRealised.b;
+                double xYmin = (selectedTaskRealised.Ymin - selectedTaskRealised.b) / selectedTaskRealised.k;
+                double xYmax = (selectedTaskRealised.Ymax - selectedTaskRealised.b) / selectedTaskRealised.k;
 
-            if (ymin <= yXmax && yXmax <= ymax)
-            {
-                limitationData.Add(new Point2 { X = xmax, Y = yXmax });
+                if (selectedTaskRealised.Ymin <= yXmax && yXmax <= selectedTaskRealised.Ymax)
+                {
+                    limitationData.Add(new Point2 { X = selectedTaskRealised.Xmax, Y = yXmax });
+                }
+                if (selectedTaskRealised.Xmin <= xYmax && xYmax <= selectedTaskRealised.Xmax)
+                {
+                    limitationData.Add(new Point2 { X = xYmax, Y = selectedTaskRealised.Ymax });
+                }
+                if (selectedTaskRealised.Ymin <= yXmin && yXmin <= selectedTaskRealised.Ymax)
+                {
+                    limitationData.Add(new Point2 { X = selectedTaskRealised.Xmin, Y = yXmin });
+                }
+                if (selectedTaskRealised.Xmin <= xYmin && xYmin <= selectedTaskRealised.Xmax)
+                {
+                    limitationData.Add(new Point2 { X = xYmin, Y = selectedTaskRealised.Ymin });
+                }
             }
-            if (xmin <= xYmax && xYmax <= xmax)
-            {
-                limitationData.Add(new Point2 { X = xYmax, Y = ymax });
-            }
-            if (ymin <= yXmin && yXmin <= ymax)
-            {
-                limitationData.Add(new Point2 { X = xmin, Y = yXmin });
-            }
-            if (xmin <= xYmin && xYmin <= xmax)
-            {
-                limitationData.Add(new Point2 { X = xYmin, Y = ymin });
-            }
+
             return limitationData;
         }
         private List<List<Point3>> GetChartDataAsTable(task task, double stepX, double stepY)
@@ -575,44 +655,44 @@ namespace User.ViewModel
             }
             //float step = 0.5f;
             List<List<Point3>> data = new(); int row = 0;
-            for (double i = (xmin); i < xmax; i += stepX, row++)
-            {
-                data.Add(new());
-                for (double j = (ymin); j < ymax; j += stepY)
+            if (selectedTaskRealised != null)
+                for (double i = (selectedTaskRealised.Xmin); i < selectedTaskRealised.Xmax; i += stepX, row++)
                 {
-                    data[row].Add(new Point3 { X = i, Y = j, Z = (float)task(new Point2 { X = i, Y = j }) });
+                    data.Add(new());
+                    for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
+                    {
+                        data[row].Add(new Point3 {X = i, Y = j, Z = (float) task(new Point2 {X = i, Y = j})});
+                    }
                 }
-            }
+
             return data;
         }
 
         private void BuildGraphsMethod()
         {
-            foreach (ITask task in Tasklist.tasks)
+            if (ParametersTable != null && selectedTaskRealised != null)
             {
-                if (task.Name == currentTask.Name)
+                var parameters = ParametersTable.ToList();
+                selectedTaskRealised.RegisterTask(parameters);
+            }
+            else
+            {
+                MessageBox.Show("Задача описана неккоректно!");
+                return;
+            }
+            try
+            {
+                if (selectedTaskRealised != null)
                 {
-                    if (ParametersTable != null)
-                    {
-                        var parameters = ParametersTable.ToList();
-                        task.RegisterTask(parameters);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Задача описана неккоректно!");
-                    }
-                    try
-                    {
-                        Getchart3Ddata = GetChartData(task.GetTask, StepGraphX, StepGraphY);
-                        Getchart2Ddata = GetChartLimitationData();
-                        exceldata = GetChartDataAsTable(task.GetTask, StepGraphX, StepGraphY);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return;
-                    }
+                    Getchart3Ddata = GetChartData(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
+                    Getchart2Ddata = GetChartLimitationData();
+                    exceldata = GetChartDataAsTable(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
 

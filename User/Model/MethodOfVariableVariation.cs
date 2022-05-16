@@ -81,13 +81,19 @@ internal class MethodOfVariableVariation: IMethod
         }
 
         Point2 extremPoint = startPoint.Clone();
-        Point2 prewExtrPoint;
-        
+        Point2 prewExtrPoint = startPoint.Clone();
+        Point2? prewPrewPoinr = null;
         do
         {
+            if (prewPrewPoinr != null && Math.Abs(prewPrewPoinr.FunctionValue - extremPoint.FunctionValue) < this.ε)
+            {
+                stepX = stepX > 0.1 ? stepX - 0.1: stepX = 0.5;
+                stepY = stepY > 0.1 ? stepY - 0.1 : stepY = 0.5;
+            }
+            prewPrewPoinr = prewExtrPoint.Clone();
             // Предыдущая точка экстремума
             prewExtrPoint = extremPoint.Clone();
-
+            
             // 2) Получение интервала переменной, подозрительного на экстремум по Х
             var (intervalPointByX1, intervalPointByX2) = GetIntervalExtrByChangeX(extremPoint);
 
@@ -117,8 +123,8 @@ internal class MethodOfVariableVariation: IMethod
                 extremPoint.FunctionValue = task(extremPoint);
             }
 
-            // Если предыдущая точка находится на границе 2ого рода, то искать екстремум нужно на этой границе
-            if (Math.Abs(extremPoint.Y - (k * extremPoint.X + b)) < 0.02)
+            // Если точка находится на границе 2ого рода, то искать екстремум нужно на этой границе
+            if (Math.Abs(extremPoint.Y - (k * extremPoint.X + b)) < 0.02 || !CheckConditionSecondKind(extremPoint.X, extremPoint.Y, sing))
             {
                 var upPoint = new Point2();
                 upPoint.X = extremPoint.X + stepX;
@@ -127,7 +133,8 @@ internal class MethodOfVariableVariation: IMethod
 
                 if ((upPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
                 {
-                    while ((upPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                    while ((upPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax
+                           && Math.Abs(upPoint.FunctionValue - extremPoint.FunctionValue) > this.ε)
                     {
                         extremPoint = upPoint.Clone();
                         upPoint.X = extremPoint.X + stepX;
@@ -153,7 +160,8 @@ internal class MethodOfVariableVariation: IMethod
 
                 if ((downPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
                 {
-                    while ((downPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax)
+                    while ((downPoint.FunctionValue > extremPoint.FunctionValue) == isExtremMax
+                           && Math.Abs(downPoint.FunctionValue - extremPoint.FunctionValue) > this.ε)
                     {
                         extremPoint = downPoint.Clone();
                         downPoint.X = extremPoint.X + stepX;
@@ -171,6 +179,11 @@ internal class MethodOfVariableVariation: IMethod
                     extremPoint = GoldenRatioMethod(intervalLimitSecond1, intervalLimitSecond2);
                 }
 
+                if (!CheckConditionSecondKind(extremPoint.X, extremPoint.Y, sing))
+                {
+                    extremPoint.Y = k * extremPoint.X + b;
+                    extremPoint.FunctionValue = task(extremPoint);
+                }
                 // Провекрка что не вышли за ограничения 1ого рода
                 if (!CheckConditionFirstKind(extremPoint.X, extremPoint.Y))
                 {
@@ -185,6 +198,7 @@ internal class MethodOfVariableVariation: IMethod
                         extremPoint.Y = ymin;
                     extremPoint.FunctionValue = task(extremPoint);
                 }
+
             }
 
         } while (Math.Abs(extremPoint.FunctionValue-prewExtrPoint.FunctionValue) > ε);
@@ -258,14 +272,17 @@ internal class MethodOfVariableVariation: IMethod
             {
                 X = point.X + stepX,
                 Y = point.Y
-            })) == isExtremMax)
+            })) == isExtremMax
+            && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X + stepX, Y = point.Y })) > this.ε
+            && CheckConditionSecondKind(point.X, point.Y, sing))
         {
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
             while ((point.FunctionValue < task(new Point2()
                    {
                        X = point.X + stepX,
                        Y = point.Y
-                   })) == isExtremMax)
+                   })) == isExtremMax
+                   && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X + stepX, Y = point.Y })) > this.ε)
             {
                 point.X += stepX;
                 point.FunctionValue = task(point);
@@ -302,13 +319,16 @@ internal class MethodOfVariableVariation: IMethod
                 {
                     X = point.X - stepX,
                     Y = point.Y
-                })) == isExtremMax)
+                })) == isExtremMax
+                && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X - stepX, Y = point.Y })) > this.ε
+                && CheckConditionSecondKind(point.X, point.Y, sing))
         {
             while ((point.FunctionValue < task(new Point2()
                    {
                        X = point.X - stepX,
                        Y = point.Y
-                   })) == isExtremMax)
+                   })) == isExtremMax
+                   && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X - stepX, Y = point.Y })) > this.ε)
             {
                 point.X -= stepX;
                 point.FunctionValue = task(point);
@@ -327,6 +347,7 @@ internal class MethodOfVariableVariation: IMethod
 
             point.X -= stepX;
             point.FunctionValue = task(point);
+            
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
@@ -360,14 +381,14 @@ internal class MethodOfVariableVariation: IMethod
             {
                 X = point.X,
                 Y = point.Y + stepY
-        })) == isExtremMax)
+        })) == isExtremMax
+            && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X, Y = point.Y + stepY })) > this.ε
+            && CheckConditionSecondKind(point.X, point.Y, sing))
         {
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
-            while ((point.FunctionValue < task(new Point2()
-                   {
-                       X = point.X ,
-                       Y = point.Y + stepY
-            })) == isExtremMax)
+            while ((point.FunctionValue < task(new Point2() {X = point.X , Y = point.Y + stepY})) 
+                   == isExtremMax 
+                   && Math.Abs(point.FunctionValue - task(new Point2() {X = point.X, Y = point.Y + stepY})) > this.ε)
             {
 
                 point.Y += stepY;
@@ -387,6 +408,7 @@ internal class MethodOfVariableVariation: IMethod
 
             point.Y += stepY;
             point.FunctionValue = task(point);
+            
             // При нарушении этого условия координата последней точки фиксируется, а за интервал,
             // «подозрительный» на экстремум, принимается интервал в два шага в направлении,
             // противоположном движению изображающей точки.
@@ -404,14 +426,17 @@ internal class MethodOfVariableVariation: IMethod
                 {
                     X = point.X ,
                     Y = point.Y - stepY
-        })) == isExtremMax)
+        })) == isExtremMax
+                && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X, Y = point.Y - stepY })) > this.ε
+                && CheckConditionSecondKind(point.X, point.Y, sing))
         {
             //  Движение осуществляется до тех пор, пока значение функции изменяется желательным образом.
             while ((point.FunctionValue < task(new Point2()
                    {
                        X = point.X ,
                        Y = point.Y - stepY
-            })) == isExtremMax)
+            })) == isExtremMax
+                   && Math.Abs(point.FunctionValue - task(new Point2() { X = point.X, Y = point.Y - stepY })) > this.ε)
             {
                 point.Y -= stepY;
                 point.FunctionValue = task(point);
