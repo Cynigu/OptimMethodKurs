@@ -356,18 +356,18 @@ namespace User.ViewModel
                                     GetfunctionValue[0].X = Math.Round(GetfunctionValue[0].X, count);
                                     GetfunctionValue[0].Y = Math.Round(GetfunctionValue[0].Y, count);
                                     GetfunctionValue[0].FunctionValue = Math.Round(GetfunctionValue[0].FunctionValue, count);
-                                    var t = Math.Round(task.GetVByT(new Point2()
+                                    var s = Math.Round(task.GetVByT(new Point2()
                                     {
                                         X = GetfunctionValue[0].X,
                                         Y = GetfunctionValue[0].Y
                                     }), count);
                                     Getresult = $"Точки:\n" + 
-                                                $"X = {GetfunctionValue[0].X}\n" +
-                                                $"Y = {GetfunctionValue[0].Y}\n" +
+                                                $"T1 = {GetfunctionValue[0].X}\n" +
+                                                $"T2 = {GetfunctionValue[0].Y}\n" +
                                                 $"ЦФ:\n" +
-                                                $"F(X, Y) = {GetfunctionValue[0].FunctionValue}\n" +
+                                                $"V(T1, T2) = {GetfunctionValue[0].FunctionValue}\n" +
                                                 $"ЦФ {task.ByObj} = {task.t}:\n" +
-                                                $"F(X, Y) = {t}";
+                                                $"S(T1, T2) = {s}";
                                     try
                                     {
                                         Getchart3Ddata = GetChartData(task.GetTask, StepGraphX, StepGraphY);
