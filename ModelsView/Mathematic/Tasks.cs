@@ -306,7 +306,7 @@
 
         public double GetValueCF(Point2 point)
         {
-            //С  =α (A1^2 +β A2 – µV1)^ N + α1(β1A1 + A2^2 – µ1V2)^N,
+            //С  = α (A1^2 +β A2 – µV1)^ N + α1(β1A1 + A2^2 – µ1V2)^N,
             var px = point.X;
             var py = point.Y;
             double FunctionValue = a * Math.Pow( (Math.Pow(px,2) - β*py- y*V1), N)
