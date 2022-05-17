@@ -66,6 +66,13 @@ namespace User.ViewModel
         private string xname;
         private string yname;
         private string cfname;
+        private double na;
+        private double nb;
+        private double ny;
+        private double v;
+        private double a;
+        private double g;
+        private double z;
         #endregion
 
         #region get; set
@@ -107,6 +114,13 @@ namespace User.ViewModel
                         Getymax = selectedTaskRealised.Ymax;
                         Getk = selectedTaskRealised.k;
                         Getb = selectedTaskRealised.b;
+                        NA = parametersTable.Single(x => x.Notation == "α").Value;
+                        NB = parametersTable.Single(x => x.Notation == "β").Value;
+                        NY = parametersTable.Single(x => x.Notation == "γ").Value;
+                        V = parametersTable.Single(x => x.Notation == "V").Value;
+                        A = parametersTable.Single(x => x.Notation == "A").Value;
+                        G = parametersTable.Single(x => x.Notation == "G").Value;
+                        Z = parametersTable.Single(x => x.Notation == "z").Value;
                     }
                 }
 
@@ -276,6 +290,98 @@ namespace User.ViewModel
                 }
             }
         }
+        public double NA
+        {
+            get { return na; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref na, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "α");
+                    param.Value = na;
+                }
+            }
+        }
+        public double NB
+        {
+            get { return nb; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref nb, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "β");
+                    param.Value = nb;
+                }
+            }
+        }
+
+        public double NY
+        {
+            get { return ny; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref ny, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "γ");
+                    param.Value = ny;
+                }
+            }
+        }
+        public double V
+        {
+            get { return v; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref v, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "V");
+                    param.Value = v;
+                }
+            }
+        }
+        public double A
+        {
+            get { return a; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref a, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "A");
+                    param.Value = a;
+                }
+            }
+        }
+        public double G
+        {
+            get { return g; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref g, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "G");
+                    param.Value = g;
+                }
+            }
+        }
+        public double Z
+        {
+            get { return z; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref z, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "z");
+                    param.Value = z;
+                }
+            }
+        }
         public string Getsing
         {
             get { return sing; }
@@ -383,7 +489,7 @@ namespace User.ViewModel
             {
                 this.RaiseAndSetIfChanged(ref extremum, value);
                 if (selectedTaskRealised != null)
-                    selectedTaskRealised.IsExtremMax = extremum == "локальный максимум" ? true : false;
+                    selectedTaskRealised.IsExtremMax = extremum == "Максимум" ? true : false;
             }
         }
         public string Getresult
@@ -406,13 +512,13 @@ namespace User.ViewModel
             tasksRealised = new Tasklist().Tasks;
             Gettasks = new(taskservice.GetAllTask());
             GetlistSing = new() { "⩾", "⩽" };
-            GetlistExtremum = new() {"локальный максимум", "локальный минимум"};
+            GetlistExtremum = new() { "Максимум", "Минимум" };
             GetfunctionValue = new();
 
             GetcurrentTask = Gettasks[0];
             GetcurrentMethod = Getmethods[0];
             Getsing = selectedTaskRealised?.sing ?? "⩾"; 
-            Getextremum = selectedTaskRealised?.IsExtremMax ?? true ? "локальный максимум" : "локальный минимум";
+            Getextremum = selectedTaskRealised?.IsExtremMax ?? true ? "Максимум" : "Минимум";
             if (ParametersTable != null) selectedTaskRealised?.RegisterTask(ParametersTable.ToList());
 
             Getk = selectedTaskRealised?.k ?? 1;
@@ -433,6 +539,8 @@ namespace User.ViewModel
             ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
                 obj => SelectedParameter != null && ParameterByTaskValue != null
                 );
+
+            BuildGraphsMethod();
         }
         #endregion
 
@@ -444,6 +552,7 @@ namespace User.ViewModel
         private RelayCommand taskDescription;
         private RelayCommand reference;
         private RelayCommand saveresult;
+        
         public RelayCommand ChangeValueCommand { get; set; }
         public ICommand Start
         {

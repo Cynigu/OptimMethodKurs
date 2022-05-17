@@ -114,7 +114,7 @@
                         <ig:XamScatterSurface3D  Width="600" Height="615"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
-                            SeriesColorInterpolation="AHSV">
+                            SeriesColorInterpolation="ARGB">
                             <ig:XamScatterSurface3D.SeriesColors>
                                 <ig:ColorCollection>
                                     <Color>DarkRed</Color>
