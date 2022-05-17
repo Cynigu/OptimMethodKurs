@@ -57,10 +57,10 @@ namespace User.ViewModel
         private double pointOfStartY;
         private double stepForMethodY;
         private double stepForMethodX;
-        private ObservableCollection<TaskParameterValueView>? parametersTable;
+        private ICollection<TaskParameterValueView>? parametersTable;
         private TaskParameterValueView ? selectedParameter;
         private double? parameterByTaskValue;
-        private ObservableCollection<ITask>? tasksRealised;
+        private ICollection<ITask>? tasksRealised;
         private ITask? selectedTaskRealised;
         private string? sourceImageFormDesc;
         private string xname;
@@ -85,12 +85,12 @@ namespace User.ViewModel
             get => cfname;
             set => this.RaiseAndSetIfChanged(ref cfname, value);
         }
-        public ObservableCollection<TaskParameterValueView>? ParametersTable
+        public ICollection<TaskParameterValueView>? ParametersTable
         {
             get => parametersTable;
             set
             {
-                this.RaiseAndSetIfChanged(ref parametersTable, value);
+                parametersTable = value;
                 if (parametersTable != null)
                 {
                     if (selectedTaskRealised == null)
@@ -188,32 +188,102 @@ namespace User.ViewModel
         public double Getk
         {
             get { return k; }
-            set { this.RaiseAndSetIfChanged(ref k, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref k, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "k");
+                    param.Value = k;
+                }
+            }
         }
         public double Getb
         {
             get { return b; }
-            set { this.RaiseAndSetIfChanged(ref b, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref b, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "b");
+                    param.Value = b;
+                }
+            }
         }
         public double Getxmin
         {
             get { return xmin; }
-            set { this.RaiseAndSetIfChanged(ref xmin, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref xmin, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "T1min");
+                    param.Value = xmin;
+                }
+            }
         }
         public double Getxmax
         {
             get { return xmax; }
-            set { this.RaiseAndSetIfChanged(ref xmax, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref xmax, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "T1max");
+                    param.Value = xmax;
+                }
+            }
         }
         public double Getymin
         {
             get { return ymin; }
-            set { this.RaiseAndSetIfChanged(ref ymin, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref ymin, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "T2min");
+                    param.Value = ymin;
+                }
+            }
         }
         public double Getymax
         {
             get { return ymax; }
-            set { this.RaiseAndSetIfChanged(ref ymax, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref ymax, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "T2max");
+                    param.Value = ymax;
+                }
+            }
+        }
+        public double Getε
+        {
+            get { return ε; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref ε, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "ε");
+                    param.Value = ε;
+                }
+            }
+        }
+        public string Getsing
+        {
+            get { return sing; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref sing, value);
+                if (selectedTaskRealised != null) selectedTaskRealised.sing = sing;
+            }
         }
         public ObservableCollection<string> GetlistSing
         {
@@ -306,15 +376,6 @@ namespace User.ViewModel
                 }
             }
         }
-        public string Getsing
-        {
-            get { return sing; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref sing, value);
-                selectedTaskRealised.sing = sing;
-            }
-        }
         public string Getextremum
         {
             get { return extremum; }
@@ -330,11 +391,7 @@ namespace User.ViewModel
             get { return result; }
             set { this.RaiseAndSetIfChanged(ref result, value); }
         }
-        public double Getε
-        {
-            get { return ε; }
-            set { this.RaiseAndSetIfChanged(ref ε, value); }
-        }
+        
         #endregion
 
         #region конструкторы
@@ -346,7 +403,7 @@ namespace User.ViewModel
             Getmethods = new(methodservice.GetAllOptimizationMethods()
                 .Where(x => x.IsRealized == true)
                 .Select(el => el));
-            tasksRealised = new ObservableCollection<ITask>((new Tasklist()).Tasks);
+            tasksRealised = new Tasklist().Tasks;
             Gettasks = new(taskservice.GetAllTask());
             GetlistSing = new() { "⩾", "⩽" };
             GetlistExtremum = new() {"локальный максимум", "локальный минимум"};
