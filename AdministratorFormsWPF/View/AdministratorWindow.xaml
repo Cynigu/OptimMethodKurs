@@ -149,8 +149,15 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Описание"></TextBlock>
                                         <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
-                                             TextWrapping="Wrap" Height="135"
+                                             TextWrapping="Wrap" Height="107"
                                              Text="{Binding TaskDescroption}"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Реализация:"></TextBlock>
+                                        <ComboBox  ItemsSource="{Binding Path=TaskRealList}"    
+                                                   SelectedItem="{Binding Path=SelectedTaskReal}"
+                                                   DisplayMemberPath="NameTask">
+                                        </ComboBox>
                                     </StackPanel>
                                     <StackPanel>
                                         <Button Content="Добавить" Command="{Binding AddTaskCommand}"></Button>

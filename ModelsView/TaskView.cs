@@ -11,5 +11,6 @@ namespace ModelsView
         public int IdTask { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string? BaseRealization { get; set; }
     }
 }

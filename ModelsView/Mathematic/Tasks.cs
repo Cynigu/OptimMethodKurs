@@ -2,7 +2,8 @@
 {
     public interface ITask
     {
-        public ICollection<string> Names { get; set; }
+        public string NameRealisation { get;}
+        public string NameTask { get;}
         public string UnitOfMeasCF { get; }
         public string SourceImageFormDesc { get; }
         public string CF { get; }
@@ -23,12 +24,13 @@
 
     internal class RegisterTask15: ITask
     {
-        public ICollection<string> Names { get; set; } = new []{"Вариант 15"};
-        public string UnitOfMeasCF { get; } = "м^3";
-        public string SourceImageFormDesc { get; } = "var15.png";
-        public string CF { get; } = "S(T1, T2)";
-        public string X { get; } = "T1";
-        public string Y { get; } = "T2";
+        public string NameRealisation => nameof(RegisterTask15);
+        public string NameTask => "Вариант 15";
+        public string UnitOfMeasCF => "м^3";
+        public string SourceImageFormDesc => "var15.png";
+        public string CF => "S(T1, T2)";
+        public string X => "T1";
+        public string Y => "T2";
         public double Xmin { get; private set; }
         public double Xmax { get; private set; }
         public double Ymin { get; private set; }
@@ -93,9 +95,10 @@
     }
     internal class RegisterTask12 : ITask
     {
-        public ICollection<string> Names { get; set; } = new []{"Вариант 12"};
-        public string UnitOfMeasCF { get; } = "кг";
-        public string SourceImageFormDesc { get; } = "var15.png";
+        public string NameRealisation => nameof(RegisterTask12);
+        public string NameTask => "Вариант 12";
+        public string UnitOfMeasCF => "кг";
+        public string SourceImageFormDesc => "var15.png";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
@@ -166,6 +169,8 @@
     }
     internal class RegisterTask13: ITask
     {
+        public string NameRealisation => nameof(RegisterTask13);
+        public string NameTask => "Вариант 13";
         private double a;
         private double β;
         private double μ;
@@ -173,7 +178,6 @@
         private double V;
         private double z;
         public double G { get; set; }
-        public ICollection<string> Names { get; set; } = new []{"Вариант 13"};
         public string UnitOfMeasCF { get; } = "у.е.";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
@@ -235,7 +239,8 @@
     }
     internal class RegisterTask14 : ITask
     {
-        public ICollection<string> Names { get; set; } = new []{"Вариант 14"};
+        public string NameRealisation => nameof(RegisterTask14);
+        public string NameTask => "Вариант 14";
         public string UnitOfMeasCF { get; } = "кг";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(A1, A2)";
@@ -314,17 +319,15 @@
             return FunctionValue * t;
         }
     }
-    public class Tasklist
+    public static class Tasklist
     {
-        private readonly List<ITask> tasks;
-        public List<ITask> Tasks => tasks;
-        public Tasklist()
+        private static List<ITask> tasks = new List<ITask>()
         {
-            tasks = new List<ITask>();
-            tasks.Add(new RegisterTask15());
-            tasks.Add(new RegisterTask13());
-            tasks.Add(new RegisterTask12());
-            tasks.Add(new RegisterTask14());
-        }
+            new RegisterTask15(),
+            new RegisterTask13(),
+            new RegisterTask12(),
+            new RegisterTask14()
+        };
+        public static List<ITask> Tasks => tasks;
     }
 }

@@ -277,7 +277,7 @@ namespace User.ViewModel
                     var isTask = false;
                     foreach (var task in tasksRealised)
                     {
-                        if (task.Names.Contains(currentTask.Name))
+                        if (task.NameTask == currentTask.BaseRealization)
                         {
                             selectedTaskRealised = task;
                             isTask = true;
@@ -312,7 +312,7 @@ namespace User.ViewModel
             set
             {
                 this.RaiseAndSetIfChanged(ref sing, value);
-                selectedTaskRealised.sing = sing;
+                if (selectedTaskRealised != null) selectedTaskRealised.sing = sing;
             }
         }
         public string Getextremum
@@ -346,7 +346,7 @@ namespace User.ViewModel
             Getmethods = new(methodservice.GetAllOptimizationMethods()
                 .Where(x => x.IsRealized == true)
                 .Select(el => el));
-            tasksRealised = new ObservableCollection<ITask>((new Tasklist()).Tasks);
+            tasksRealised = new ObservableCollection<ITask>(Tasklist.Tasks);
             Gettasks = new(taskservice.GetAllTask());
             GetlistSing = new() { "⩾", "⩽" };
             GetlistExtremum = new() {"локальный максимум", "локальный минимум"};
