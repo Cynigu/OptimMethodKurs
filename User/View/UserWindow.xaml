@@ -117,8 +117,8 @@
                             SeriesColorInterpolation="AHSV">
                             <ig:XamScatterSurface3D.SeriesColors>
                                 <ig:ColorCollection>
-                                    <Color>MediumPurple</Color>
-                                    <Color>MediumVioletRed</Color>
+                                    <Color>DarkRed</Color>
+                                    <Color>Green</Color>
                                     <Color>Yellow</Color>
                                 </ig:ColorCollection>
                             </ig:XamScatterSurface3D.SeriesColors>
