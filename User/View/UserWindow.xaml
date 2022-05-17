@@ -157,7 +157,7 @@
                                 <ig:XamDataChart Width="460" Height="460">
                                     <ig:XamDataChart.Axes>
                                         <ig:NumericXAxis x:Name="xAxis" Title="{Binding XName}"/>
-                                    <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
+                                        <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
                                     </ig:XamDataChart.Axes>
                                     <ig:XamDataChart.Series>
                                         <ig:ScatterContourSeries 
