@@ -114,15 +114,11 @@
                         <ig:XamScatterSurface3D  Width="600" Height="615"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
-                            RimThickness="0.1"
-                            SeriesColorInterpolation="AHSV"
-                            CrosshairAxes="XY"
-                            CrosshairBrush="Red"
-                            CrosshairThickness="3">
+                            SeriesColorInterpolation="AHSV">
                             <ig:XamScatterSurface3D.SeriesColors>
                                 <ig:ColorCollection>
-                                    <Color>DarkSlateBlue</Color>
-                                    <Color>DeepSkyBlue</Color>
+                                    <Color>MediumPurple</Color>
+                                    <Color>MediumVioletRed</Color>
                                     <Color>Yellow</Color>
                                 </ig:ColorCollection>
                             </ig:XamScatterSurface3D.SeriesColors>
