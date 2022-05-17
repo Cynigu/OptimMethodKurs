@@ -312,6 +312,7 @@ namespace User.Model
             this.ε = parameters.Where(x => x.Notation == "ε")
                 .Select(el => el.Value).Single();
         }
+
         public double GetValueCF(Point2 point)
         {
             //С  =α (A1^2 +β A2 – µV1)^ N + α1(β1A1 + A2^2 – µ1V2)^N,
