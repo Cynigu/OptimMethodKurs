@@ -1,13 +1,4 @@
-﻿using ModelsView;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Services.Interfaces;
-
-namespace User.Model
+﻿namespace ModelsView.Mathematic
 {
     public interface ITask
     {

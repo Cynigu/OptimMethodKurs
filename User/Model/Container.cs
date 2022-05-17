@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using System.Collections.ObjectModel;
+using ModelsView.Mathematic;
 using User.Model.FileServices;
 using User.ViewModel;
 

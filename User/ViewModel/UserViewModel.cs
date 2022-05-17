@@ -17,6 +17,7 @@ using User.Model.FileServices;
 using Syncfusion.XlsIO;
 using System;
 using System.Threading.Tasks;
+using ModelsView.Mathematic;
 
 namespace User.ViewModel
 {

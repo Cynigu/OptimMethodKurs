@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using System.Collections.ObjectModel;
+using ModelsView.Mathematic;
 using User.Model;
 
 
