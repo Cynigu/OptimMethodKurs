@@ -460,6 +460,7 @@ namespace User.ViewModel
                                 Getchart3Ddata = GetChartData(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
                                 Getchart2Ddata = GetChartLimitationData();
                                 exceldata = GetChartDataAsTable(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
+                                PointsTable = new ObservableCollection<Point3>(Getchart3Ddata);
                             }
                             catch (ArgumentException ex)
                             {
@@ -566,13 +567,12 @@ namespace User.ViewModel
                       var builderBase = Container.GetBuilder().Build();
                       dialogService = builderBase.Resolve<DialogService>();
                       fileService = builderBase.Resolve<FileService>();
-                      string data =
-                      $"Задача: {currentTask.Name}\n" +
-                      $"Метод: {currentMethod.Name}\n" +
-                      $"Значение целевой функции в точке\n" +
-                      $"X = {GetfunctionValue[0].X}\n" +
-                      $"Y = {GetfunctionValue[0].Y}\n" +
-                      $"F(X, Y) = {GetfunctionValue[0].FunctionValue}";
+                      string data = $"Точки:\n" +
+                                    $"{selectedTaskRealised.X} = {GetfunctionValue[0].X}\n" +
+                                    $"{selectedTaskRealised.Y}  = {GetfunctionValue[0].Y}\n" +
+                                    $"ЦФ:\n" +
+                                    $"{selectedTaskRealised.CF}  = {GetfunctionValue[0].FunctionValue} " +
+                                    $"({selectedTaskRealised.UnitOfMeasCF})";
                       SaveFile.SaveXls(exceldata, data, application);
                       try
                       {
