@@ -276,7 +276,7 @@ namespace User.ViewModel
                     var isTask = false;
                     foreach (var task in tasksRealised)
                     {
-                        if (task.Name == currentTask.Name)
+                        if (task.Names.Contains(currentTask.Name))
                         {
                             selectedTaskRealised = task;
                             isTask = true;
