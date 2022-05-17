@@ -88,6 +88,7 @@ namespace AdministratorFormsWPF.ViewModel
                 "Пользователи", "Параметры", "Ед. измерения",
                 "Задачи оптимизации", "Методы оптимизации"
             };
+            SelectedTable = "Пользователи";
         }
 
         #region Fields
