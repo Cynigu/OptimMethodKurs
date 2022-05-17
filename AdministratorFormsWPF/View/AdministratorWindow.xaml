@@ -181,7 +181,14 @@
                                     <DataGrid ItemsSource ="{Binding Path=ParametersByTaskTable, Mode=TwoWay}"
                                               SelectedItem="{Binding SelectedParameterByTaskRow}"
                                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                                              Width="400" Height="250">
+                                              Width="400" Height="250" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="ID параметра" Binding="{Binding Path=ParameterId}" />
+                                            <DataGridTextColumn Header="Описание" Binding="{Binding Path=Description}" />
+                                            <DataGridTextColumn  Header="Обозначение" Binding="{Binding Path=Notation}" />
+                                            <DataGridTextColumn  Header="Значение" Binding="{Binding Path=Value}" />
+                                            <DataGridTextColumn  Header="Ед. измерения" Binding="{Binding Path=UnitOfMeasName}" />
+                                        </DataGrid.Columns>
                                     </DataGrid>
                                     <Button Content="Обновить таблицу" Command="{Binding UpdateParametersForTaskTableCommand}"></Button>
                                 </StackPanel>

@@ -66,10 +66,16 @@ namespace User.ViewModel
         private string xname;
         private string yname;
         private string cfname;
+        private ObservableCollection<Point3> pointsTable;
         #endregion
 
         #region get; set
 
+        public ObservableCollection<Point3> PointsTable
+        {
+            get => pointsTable;
+            set => this.RaiseAndSetIfChanged(ref pointsTable, value);
+        }
         public string XName
         {
             get => xname;
@@ -387,6 +393,7 @@ namespace User.ViewModel
         private RelayCommand taskDescription;
         private RelayCommand reference;
         private RelayCommand saveresult;
+        
         public RelayCommand ChangeValueCommand { get; set; }
         public ICommand Start
         {
@@ -612,7 +619,7 @@ namespace User.ViewModel
                 {
                     for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
                     {
-                        chart3dData.Add(new Point3 {X = i, Y = j, Z = (float) task(new Point2 {X = i, Y = j})});
+                        chart3dData.Add(new Point3 {X = i, Y = j, Z = task(new Point2 {X = i, Y = j})});
                     }
                 }
 
@@ -663,7 +670,7 @@ namespace User.ViewModel
                     data.Add(new());
                     for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
                     {
-                        data[row].Add(new Point3 {X = i, Y = j, Z = (float) task(new Point2 {X = i, Y = j})});
+                        data[row].Add(new Point3 {X = i, Y = j, Z = task(new Point2 {X = i, Y = j})});
                     }
                 }
 
@@ -689,6 +696,7 @@ namespace User.ViewModel
                     Getchart3Ddata = GetChartData(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
                     Getchart2Ddata = GetChartLimitationData();
                     exceldata = GetChartDataAsTable(selectedTaskRealised.GetValueCF, StepGraphX, StepGraphY);
+                    PointsTable = new ObservableCollection<Point3>(Getchart3Ddata);
                 }
             }
             catch (ArgumentException ex)
