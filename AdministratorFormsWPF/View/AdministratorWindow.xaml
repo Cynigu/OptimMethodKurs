@@ -35,9 +35,8 @@
         </Style>
     </Window.Resources>
     <StackPanel>
-        <TabControl>
-            <TabItem Header="Пользователи">
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+        <ComboBox Width="auto" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" ></ComboBox>
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Visibility="{Binding IsUsers, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Margin="5,0,5,0">
                         <TextBlock Width="200" Text="Список пользователей" HorizontalAlignment="Left"></TextBlock>
                         <DataGrid ItemsSource ="{Binding Path=UsersTable, Mode=TwoWay}"
@@ -69,9 +68,7 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Параметры">
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,5"  Visibility="{Binding IsParameters, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Margin="5,0,5,0">
                         <TextBlock Text="Список параметров" Width="auto"></TextBlock>
                         <DataGrid ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
@@ -103,9 +100,7 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Ед. измерения">
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Visibility="{Binding IsUnitsOfMeas, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Margin="5,0,5,0">
                         <TextBlock Text="Список единиц измерений" Width="auto"></TextBlock>
                         <DataGrid ItemsSource ="{Binding Path=UnitOfMeasTable, Mode=TwoWay}"
@@ -126,9 +121,7 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Задачи оптимизации">
-                <StackPanel>
+        <StackPanel Visibility="{Binding IsTasks, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TabControl>
                         <TabItem Header="Задачи">
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
@@ -218,9 +211,7 @@
                         </TabItem>
                     </TabControl>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Методы оптимизации">
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Visibility="{Binding IsMethods, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Margin="5,0,5,0">
                         <TextBlock Text="Список методов оптимизации" Width="auto"></TextBlock>
                         <DataGrid ItemsSource ="{Binding Path=OptimizationMethodsTable, Mode=TwoWay}"
@@ -245,7 +236,5 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </TabItem>
-        </TabControl>
     </StackPanel>
 </Window>

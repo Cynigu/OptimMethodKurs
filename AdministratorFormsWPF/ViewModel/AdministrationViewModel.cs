@@ -81,6 +81,13 @@ namespace AdministratorFormsWPF.ViewModel
             AddParameterForTaskCommand = new AsyncCommand(AddParameterByTaskAsync, CanAddParameterForTask);
             DeleteParameterForTaskCommand = new AsyncCommand(DeleteParameterByTaskAsync,CanDeleteParameterForTask);
             EditParameterForTaskCommand = new AsyncCommand(EditParameterByTaskAsync, CanEditParameterForTask);
+
+            // общее
+            Tables = new ObservableCollection<string>()
+            {
+                "Пользователи", "Параметры", "Ед. измерения",
+                "Задачи оптимизации", "Методы оптимизации"
+            };
         }
 
         #region Fields
@@ -127,11 +134,136 @@ namespace AdministratorFormsWPF.ViewModel
         private TaskParameterValueView? _selectedParameterByTaskRow;
         private TaskView? _selectedTaskForViewParameters;
         private ObservableCollection<TaskView>? _tasksForViewParametersComboBox;
+
+        // общее
+        private ObservableCollection<string> _tableses;
+        private string selectedTable;
+        private bool isUsers;
+        private bool isParameters;
+        private bool isUnitsOfMeas;
+        private bool isTasks;
+        private bool isMethods;
+
         #endregion
 
 
         #region Properties
 
+        #region Общее
+
+        public ObservableCollection<string> Tables
+        {
+            get => _tableses;
+            set => this.RaiseAndSetIfChanged(ref _tableses, value);
+        }
+
+        public string SelectedTable
+        {
+            get => selectedTable;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref selectedTable, value);
+                // "Пользователи", "Параметры", "Ед. измерения",
+                //"Задачи оптимизации", "Методы оптимизации"
+                if (selectedTable == "Пользователи")
+                    IsUsers = true;
+                if (selectedTable == "Параметры")
+                    IsParameters = true;
+                if (selectedTable == "Ед. измерения")
+                    IsUnitsOfMeas = true;
+                if (selectedTable == "Задачи оптимизации")
+                    IsTasks = true;
+                if (selectedTable == "Методы оптимизации")
+                    IsMethods = true;
+            }
+        }
+
+        public bool IsUsers
+        {
+            get => isUsers;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isUsers, value);
+                if (isUsers)
+                {
+                    // IsUsers = false
+                    IsParameters = false;
+                    IsUnitsOfMeas = false;
+                    IsTasks = false;
+                    IsMethods = false;
+                }
+            }
+        }
+
+        public bool IsParameters
+        {
+            get => isParameters;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isParameters, value);
+                if (IsParameters)
+                {
+                    IsUsers = false;
+                    //IsParameters = false;
+                    IsUnitsOfMeas = false;
+                    IsTasks = false;
+                    IsMethods = false;
+                }
+            }
+        }
+
+        public bool IsUnitsOfMeas
+        {
+            get => isUnitsOfMeas;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isUnitsOfMeas, value);
+                if (IsUnitsOfMeas)
+                {
+                    IsUsers = false;
+                    IsParameters = false;
+                    //IsUnitsOfMeas = false;
+                    IsTasks = false;
+                    IsMethods = false;
+                }
+            }
+        }
+
+        public bool IsTasks
+        {
+            get => isTasks;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isTasks, value);
+                if (IsTasks)
+                {
+                    IsUsers = false;
+                    IsParameters = false;
+                    IsUnitsOfMeas = false;
+                    //IsTasks = false;
+                    IsMethods = false;
+                }
+            }
+        }
+
+        public bool IsMethods
+        {
+            get => isMethods;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isMethods, value);
+                if (IsMethods)
+                {
+                    IsUsers = false;
+                    IsParameters = false;
+                    IsUnitsOfMeas = false;
+                    IsTasks = false;
+                    //IsMethods = false;
+                }
+            }
+        }
+
+        #endregion
         #region Задачи
 
         public string? TaskName
