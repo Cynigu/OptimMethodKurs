@@ -9,9 +9,9 @@ using Services.Interfaces;
 
 namespace User.Model
 {
-    internal interface ITask
+    public interface ITask
     {
-        public string Name { get; }
+        public ICollection<string> Names { get; set; }
         public string UnitOfMeasCF { get; }
         public string SourceImageFormDesc { get; }
         public string CF { get; }
@@ -32,7 +32,7 @@ namespace User.Model
 
     internal class RegisterTask15: ITask
     {
-        public string Name { get; } = "Вариант 15";
+        public ICollection<string> Names { get; set; } = new []{"Вариант 15"};
         public string UnitOfMeasCF { get; } = "м^3";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
@@ -62,34 +62,34 @@ namespace User.Model
             {
                 throw new ArgumentException("В базе данных нет параметров для этой задачи!");
             }
-            this.a = parameters.Where(x=>x.Notation == "α" && x.TaskName == Name)
+            this.a = parameters.Where(x=>x.Notation == "α")
                 .Select(el=>el.Value).Single();
-            this.β = parameters.Where(x => x.Notation == "β" && x.TaskName == Name)
+            this.β = parameters.Where(x => x.Notation == "β")
                 .Select(el => el.Value).Single();
-            this.y = parameters.Where(x => x.Notation == "γ" && x.TaskName == Name)
+            this.y = parameters.Where(x => x.Notation == "γ")
                 .Select(el => el.Value).Single();
-            this.p1 = parameters.Where(x => x.Notation == "∆р1" && x.TaskName == Name)
+            this.p1 = parameters.Where(x => x.Notation == "∆р1")
                 .Select(el => el.Value).Single();
-            this.p2 = parameters.Where(x => x.Notation == "∆р2" && x.TaskName == Name)
+            this.p2 = parameters.Where(x => x.Notation == "∆р2")
                 .Select(el => el.Value).Single();
-            this.N = parameters.Where(x => x.Notation == "N" && x.TaskName == Name)
+            this.N = parameters.Where(x => x.Notation == "N")
                 .Select(el => el.Value).Single();
-            this.t = parameters.Where(x => x.Notation == "t" && x.TaskName == Name)
+            this.t = parameters.Where(x => x.Notation == "t")
                 .Select(el => el.Value).Single();
 
-            this.Xmin = parameters.Where(x => x.Notation == "T1min" && x.TaskName == Name)
+            this.Xmin = parameters.Where(x => x.Notation == "T1min")
                 .Select(el => el.Value).Single();
-            this.Xmax = parameters.Where(x => x.Notation == "T1max" && x.TaskName == Name)
+            this.Xmax = parameters.Where(x => x.Notation == "T1max")
                 .Select(el => el.Value).Single();
-            this.Ymin = parameters.Where(x => x.Notation == "T2min" && x.TaskName == Name)
+            this.Ymin = parameters.Where(x => x.Notation == "T2min")
                 .Select(el => el.Value).Single();
-            this.Ymax = parameters.Where(x => x.Notation == "T2max" && x.TaskName == Name)
+            this.Ymax = parameters.Where(x => x.Notation == "T2max")
                 .Select(el => el.Value).Single();
-            this.k = parameters.Where(x => x.Notation == "k" && x.TaskName == Name)
+            this.k = parameters.Where(x => x.Notation == "k")
                 .Select(el => el.Value).Single();
-            this.b = parameters.Where(x => x.Notation == "b" && x.TaskName == Name)
+            this.b = parameters.Where(x => x.Notation == "b")
                 .Select(el => el.Value).Single();
-            this.ε = parameters.Where(x => x.Notation == "ε" && x.TaskName == Name)
+            this.ε = parameters.Where(x => x.Notation == "ε")
                 .Select(el => el.Value).Single();
         }
 
@@ -102,7 +102,7 @@ namespace User.Model
     }
     internal class RegisterTask12 : ITask
     {
-        public string Name { get; } = "Вариант 12";
+        public ICollection<string> Names { get; set; } = new []{"Вариант 12"};
         public string UnitOfMeasCF { get; } = "кг";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
@@ -132,36 +132,36 @@ namespace User.Model
             {
                 throw new ArgumentException("В базе данных нет параметров для этой задачи!");
             }
-            this.a = parameters.Where(x => x.Notation == "α" && x.TaskName == Name)
+            this.a = parameters.Where(x => x.Notation == "α")
                 .Select(el => el.Value).Single();
-            this.β = parameters.Where(x => x.Notation == "β" && x.TaskName == Name)
+            this.β = parameters.Where(x => x.Notation == "β")
                 .Select(el => el.Value).Single();
-            this.y = parameters.Where(x => x.Notation == "γ" && x.TaskName == Name)
+            this.y = parameters.Where(x => x.Notation == "γ")
                 .Select(el => el.Value).Single();
-            this.A1 = parameters.Where(x => x.Notation == "A1" && x.TaskName == Name)
+            this.A1 = parameters.Where(x => x.Notation == "A1")
                 .Select(el => el.Value).Single();
-            this.A2 = parameters.Where(x => x.Notation == "A2" && x.TaskName == Name)
+            this.A2 = parameters.Where(x => x.Notation == "A2")
                 .Select(el => el.Value).Single();
-            this.V1 = parameters.Where(x => x.Notation == "V1" && x.TaskName == Name)
+            this.V1 = parameters.Where(x => x.Notation == "V1")
                 .Select(el => el.Value).Single();
-            this.V2 = parameters.Where(x => x.Notation == "V2" && x.TaskName == Name)
+            this.V2 = parameters.Where(x => x.Notation == "V2")
                 .Select(el => el.Value).Single();
 
-            this.t = parameters.Where(x => x.Notation == "t" && x.TaskName == Name)
+            this.t = parameters.Where(x => x.Notation == "t")
                 .Select(el => el.Value).Single();
-            this.Xmin = parameters.Where(x => x.Notation == "T1min" && x.TaskName == Name)
+            this.Xmin = parameters.Where(x => x.Notation == "T1min")
                 .Select(el => el.Value).Single();
-            this.Xmax = parameters.Where(x => x.Notation == "T1max" && x.TaskName == Name)
+            this.Xmax = parameters.Where(x => x.Notation == "T1max")
                 .Select(el => el.Value).Single();
-            this.Ymin = parameters.Where(x => x.Notation == "T2min" && x.TaskName == Name)
+            this.Ymin = parameters.Where(x => x.Notation == "T2min")
                 .Select(el => el.Value).Single();
-            this.Ymax = parameters.Where(x => x.Notation == "T2max" && x.TaskName == Name)
+            this.Ymax = parameters.Where(x => x.Notation == "T2max")
                 .Select(el => el.Value).Single();
-            this.k = parameters.Where(x => x.Notation == "k" && x.TaskName == Name)
+            this.k = parameters.Where(x => x.Notation == "k")
                 .Select(el => el.Value).Single();
-            this.b = parameters.Where(x => x.Notation == "b" && x.TaskName == Name)
+            this.b = parameters.Where(x => x.Notation == "b")
                 .Select(el => el.Value).Single();
-            this.ε = parameters.Where(x => x.Notation == "ε" && x.TaskName == Name)
+            this.ε = parameters.Where(x => x.Notation == "ε")
                 .Select(el => el.Value).Single();
         }
         public double GetValueCF(Point2 point)
@@ -182,7 +182,7 @@ namespace User.Model
         private double V;
         private double z;
         public double G { get; set; }
-        public string Name { get; } = "Вариант 13";
+        public ICollection<string> Names { get; set; } = new []{"Вариант 13"};
         public string UnitOfMeasCF { get; } = "у.е.";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
@@ -244,7 +244,7 @@ namespace User.Model
     }
     internal class RegisterTask14 : ITask
     {
-        public string Name { get; } = "Вариант 14";
+        public ICollection<string> Names { get; set; } = new []{"Вариант 14"};
         public string UnitOfMeasCF { get; } = "кг";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(A1, A2)";
@@ -276,42 +276,43 @@ namespace User.Model
             {
                 throw new ArgumentException("В базе данных нет параметров для этой задачи!");
             }
-            this.a = parameters.Where(x => x.Notation == "α" && x.TaskName == Name)
+            this.a = parameters.Where(x => x.Notation == "α")
                 .Select(el => el.Value).Single();
-            this.β = parameters.Where(x => x.Notation == "β" && x.TaskName == Name)
+            this.β = parameters.Where(x => x.Notation == "β")
                 .Select(el => el.Value).Single();
-            this.y = parameters.Where(x => x.Notation == "γ" && x.TaskName == Name)
+            this.y = parameters.Where(x => x.Notation == "γ")
                 .Select(el => el.Value).Single();
-            this.a = parameters.Where(x => x.Notation == "α1" && x.TaskName == Name)
+            this.a = parameters.Where(x => x.Notation == "α1")
                 .Select(el => el.Value).Single();
-            this.β = parameters.Where(x => x.Notation == "β1" && x.TaskName == Name)
+            this.β = parameters.Where(x => x.Notation == "β1")
                 .Select(el => el.Value).Single();
-            this.y = parameters.Where(x => x.Notation == "γ1" && x.TaskName == Name)
+            this.y = parameters.Where(x => x.Notation == "γ1")
                 .Select(el => el.Value).Single();
-            this.V1 = parameters.Where(x => x.Notation == "V1" && x.TaskName == Name)
+            this.V1 = parameters.Where(x => x.Notation == "V1")
                 .Select(el => el.Value).Single();
-            this.V2 = parameters.Where(x => x.Notation == "V2" && x.TaskName == Name)
+            this.V2 = parameters.Where(x => x.Notation == "V2")
                 .Select(el => el.Value).Single();
-            this.N = parameters.Where(x => x.Notation == "N" && x.TaskName == Name)
+            this.N = parameters.Where(x => x.Notation == "N")
                 .Select(el => el.Value).Single();
 
-            this.t = parameters.Where(x => x.Notation == "t" && x.TaskName == Name)
+            this.t = parameters.Where(x => x.Notation == "t")
                 .Select(el => el.Value).Single();
-            this.Xmin = parameters.Where(x => x.Notation == "A1min" && x.TaskName == Name)
+            this.Xmin = parameters.Where(x => x.Notation == "A1min")
                 .Select(el => el.Value).Single();
-            this.Xmax = parameters.Where(x => x.Notation == "A1max" && x.TaskName == Name)
+            this.Xmax = parameters.Where(x => x.Notation == "A1max")
                 .Select(el => el.Value).Single();
-            this.Ymin = parameters.Where(x => x.Notation == "A2min" && x.TaskName == Name)
+            this.Ymin = parameters.Where(x => x.Notation == "A2min")
                 .Select(el => el.Value).Single();
-            this.Ymax = parameters.Where(x => x.Notation == "A2max" && x.TaskName == Name)
+            this.Ymax = parameters.Where(x => x.Notation == "A2max")
                 .Select(el => el.Value).Single();
-            this.k = parameters.Where(x => x.Notation == "k" && x.TaskName == Name)
+            this.k = parameters.Where(x => x.Notation == "k")
                 .Select(el => el.Value).Single();
-            this.b = parameters.Where(x => x.Notation == "b" && x.TaskName == Name)
+            this.b = parameters.Where(x => x.Notation == "b")
                 .Select(el => el.Value).Single();
-            this.ε = parameters.Where(x => x.Notation == "ε" && x.TaskName == Name)
+            this.ε = parameters.Where(x => x.Notation == "ε")
                 .Select(el => el.Value).Single();
         }
+
         public double GetValueCF(Point2 point)
         {
             //С  =α (A1^2 +β A2 – µV1)^ N + α1(β1A1 + A2^2 – µ1V2)^N,
@@ -322,7 +323,7 @@ namespace User.Model
             return FunctionValue * t;
         }
     }
-    internal class Tasklist
+    public class Tasklist
     {
         private readonly List<ITask> tasks;
         public List<ITask> Tasks => tasks;

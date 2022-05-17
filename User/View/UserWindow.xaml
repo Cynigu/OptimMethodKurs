@@ -113,7 +113,19 @@
                     <TabItem Header="3D график">
                         <ig:XamScatterSurface3D  Width="600" Height="615"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            XMemberPath="X" YMemberPath="Y" ZMemberPath="Z">
+                            XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
+                            RimThickness="0.1"
+                            SeriesColorInterpolation="AHSV"
+                            CrosshairAxes="XY"
+                            CrosshairBrush="Red"
+                            CrosshairThickness="3">
+                            <ig:XamScatterSurface3D.SeriesColors>
+                                <ig:ColorCollection>
+                                    <Color>DarkSlateBlue</Color>
+                                    <Color>DeepSkyBlue</Color>
+                                    <Color>Yellow</Color>
+                                </ig:ColorCollection>
+                            </ig:XamScatterSurface3D.SeriesColors>
                             <ig:XamScatterSurface3D.XAxis>
                                 <ig:LinearAxis Title="{Binding XName}"/>
                             </ig:XamScatterSurface3D.XAxis>
