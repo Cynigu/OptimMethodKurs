@@ -173,7 +173,7 @@
         private double V;
         private double z;
         public double G { get; set; }
-        public ICollection<string> Names { get; set; } = new []{"Вариант 13"};
+        public ICollection<string> Names { get; set; } = new []{"Вариант 13", "Вариант 26"};
         public string UnitOfMeasCF { get; } = "у.е.";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
