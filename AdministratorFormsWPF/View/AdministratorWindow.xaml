@@ -32,6 +32,7 @@
         <Style TargetType="DataGrid">
             <Setter Property="Width" Value="400"></Setter>
             <Setter Property="Height" Value="270"></Setter>
+            <Setter Property="ColumnWidth" Value="*"></Setter>
         </Style>
     </Window.Resources>
     <StackPanel>
@@ -137,7 +138,13 @@
                                     <DataGrid ItemsSource ="{Binding Path=TasksTable, Mode=TwoWay}"
                                           SelectedItem="{Binding SelectedTaskRow}"
                                           CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                                          Width="400" Height="250">
+                                          Width="400" Height="250" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Width="21" Header="ID" Binding="{Binding IdTask}"></DataGridTextColumn>
+                                            <DataGridTextColumn Width="70" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                                            <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
+                                            <DataGridTextColumn Width="70" Header="Баз. реал." Binding="{Binding BaseRealization}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
                                     </DataGrid>
                                     <Button Content="Обновить таблицу" Command="{Binding UpdateTasksTableCommand}"></Button>
                                 </StackPanel>
@@ -183,11 +190,11 @@
                                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
                                               Width="400" Height="250" AutoGenerateColumns="False">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="ID параметра" Binding="{Binding Path=ParameterId}" />
-                                            <DataGridTextColumn Header="Описание" Binding="{Binding Path=Description}" />
-                                            <DataGridTextColumn  Header="Обозначение" Binding="{Binding Path=Notation}" />
-                                            <DataGridTextColumn  Header="Значение" Binding="{Binding Path=Value}" />
-                                            <DataGridTextColumn  Header="Ед. измерения" Binding="{Binding Path=UnitOfMeasName}" />
+                                            <DataGridTextColumn Width="21" Header="ID параметра" Binding="{Binding Path=ParameterId}" />
+                                            <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Path=Description}" />
+                                            <DataGridTextColumn Width="40" Header="Об-я" Binding="{Binding Path=Notation}" />
+                                            <DataGridTextColumn Width="40" Header="Зн-е" Binding="{Binding Path=Value}" />
+                                            <DataGridTextColumn Width="45" Header="Ед.и-я" Binding="{Binding Path=UnitOfMeasName}" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     <Button Content="Обновить таблицу" Command="{Binding UpdateParametersForTaskTableCommand}"></Button>
@@ -239,7 +246,13 @@
                         <TextBlock Text="Список методов оптимизации" Width="auto"></TextBlock>
                         <DataGrid ItemsSource ="{Binding Path=OptimizationMethodsTable, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedOptimizationMethodRow}"
-                                  CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True">
+                                  CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="21" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                                <DataGridCheckBoxColumn Width="40" Header="Реал." Binding="{Binding IsRealized}"></DataGridCheckBoxColumn>
+                            </DataGrid.Columns>
                         </DataGrid>
                         <Button Content="Обновить" Command="{Binding UpdateTableOptimizationMethodCommand}"></Button>
                     </StackPanel>

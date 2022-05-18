@@ -224,9 +224,9 @@
                         <DataGrid Width="460" Height="450" ItemsSource="{Binding PointsTable}"
                                   CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="100" Header="T1" Binding="{Binding Path=X, StringFormat='0.00'}" />
-                                <DataGridTextColumn Width="100" Header="T2" Binding="{Binding Path=Y, StringFormat='0.00'}" />
-                                <DataGridTextColumn Width="100" Header="S(T1, T2)" Binding="{Binding Path=Z, StringFormat='0.00'}" />
+                                <DataGridTextColumn Width="*" Header="T1" Binding="{Binding Path=X, StringFormat='0.00'}" />
+                                <DataGridTextColumn Width="*" Header="T2" Binding="{Binding Path=Y, StringFormat='0.00'}" />
+                                <DataGridTextColumn Width="*" Header="S(T1, T2)" Binding="{Binding Path=Z, StringFormat='0.00'}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
