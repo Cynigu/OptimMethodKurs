@@ -65,7 +65,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="*" Header="Логин" Binding="{Binding Login}"></DataGridTextColumn>
                             <DataGridTextColumn Width="*" Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button Content="Обновить" Command="{Binding UpdateUsersListCommand}"></Button>
@@ -103,10 +103,10 @@
                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
                               VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Header="ID параметра" Binding="{Binding Id}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                             <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Обозначение" Binding="{Binding Notation}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Единица измерения" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button Content="Обновить" Command="{Binding UpdateParametersCommand}"></Button>
@@ -174,7 +174,7 @@
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                         <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
-                                        <DataGridTextColumn Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
                                     </DataGrid.Columns>
                             </DataGrid>
                             <Button Content="Обновить таблицу" Command="{Binding UpdateTasksTableCommand}"></Button>
@@ -215,11 +215,11 @@
                                           CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
                                           AutoGenerateColumns="False" MaxWidth="600">
                                     <DataGrid.Columns>
-                                    <DataGridTextColumn  Header="ID параметра" Binding="{Binding ParameterId}"></DataGridTextColumn>
-                                    <DataGridTextColumn  Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                                    <DataGridTextColumn  Header="Обозначение" Binding="{Binding Notation}"></DataGridTextColumn>
-                                    <DataGridTextColumn  Header="Единица измерения" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
-                                    <DataGridTextColumn  Header="Значение" Binding="{Binding Value}"></DataGridTextColumn>
+                                    <DataGridTextColumn  Header="ID пар-ра" Binding="{Binding ParameterId}"></DataGridTextColumn>
+                                    <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
+                                    <DataGridTextColumn  Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                                    <DataGridTextColumn  Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                                    <DataGridTextColumn  Header="Знач-е" Binding="{Binding Value}"></DataGridTextColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                                 <Button Content="Обновить таблицу" Command="{Binding UpdateParametersForTaskTableCommand}"></Button>
@@ -233,10 +233,10 @@
                                                   Height="200" AutoGenerateColumns="False" 
                                                   IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False">
                                             <DataGrid.Columns>
-                                            <DataGridTextColumn Width="15" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                                             <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                                            <DataGridTextColumn Width="*" Header="Обозначение" Binding="{Binding Notation}"></DataGridTextColumn>
-                                            <DataGridTextColumn Width="35" Header="Единица измерения" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Е-ца из-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
                                 </GroupBox>
@@ -271,7 +271,7 @@
                               AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Реализация" Binding="{Binding IsRealized}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Реализация" Binding="{Binding IsRealized}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button Content="Обновить" Command="{Binding UpdateTableOptimizationMethodCommand}"></Button>
