@@ -8,38 +8,33 @@
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
         Title="Окно исследователя" Height="770" Width="960" WindowStartupLocation="CenterScreen" 
-        Background="#FF7265A6" Foreground="White" >
+        Background="#FFA6E9F4" Foreground="#FF297986" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"></Setter>
             <Setter Property="Width" Value="200"></Setter>
-            <Setter Property="Background" Value="#FF483D76"></Setter>
-            <Setter Property="BorderBrush" Value="#FF41366C"></Setter>
-            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="BorderBrush" Value="#FF297986"></Setter>
+            <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Width" Value="200"></Setter>
-            <Setter Property="Foreground" Value="#FF41366C"></Setter>
+            <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="wpfx:DoubleUpDown">
             <Setter Property="Width" Value="60"></Setter>
             <Setter Property="Margin" Value="3"></Setter>
             <Setter Property="Height" Value="20"></Setter>
-            <Setter Property="BorderBrush" Value="#FF6856AF"></Setter>
+            <Setter Property="BorderBrush" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="TabItem">
-            <Setter Property="Background" Value="#FF7265A6"></Setter>
-            <Setter Property="Foreground" Value="#FF41366C"></Setter>
-            <Setter Property="BorderBrush" Value="#FF41366C"></Setter>
+            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="BorderBrush" Value="#FF297986"></Setter>
+            <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="White"></Setter>
-        </Style>
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="#FF7265A6"></Setter>
-            <Setter Property="Foreground" Value="#FF41366C"></Setter>
-            <Setter Property="BorderBrush" Value="#FF41366C"></Setter>
+            <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
     </Window.Resources>
     <StackPanel>

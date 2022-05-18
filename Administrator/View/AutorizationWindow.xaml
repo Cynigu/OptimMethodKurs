@@ -4,21 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Авторизация" Height="200" Width="310" Background="#FF7265A6" Foreground="White">
+        Title="Авторизация" Height="200" Width="310" Background="#FFA6E9F4" Foreground="#FF297986">
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="BorderBrush" Value="#FF6856AF"></Setter>
+            <Setter Property="BorderBrush" Value="#FF60C1D1"></Setter>
             <Setter Property="Padding" Value="3"></Setter>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Width" Value="auto"></Setter>
             <Setter Property="Height" Value="40"></Setter>
-            <Setter Property="Background" Value="#FF483D76"></Setter>
-            <Setter Property="BorderBrush" Value="#FF41366C"></Setter>
-            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="BorderBrush" Value="#FF297986"></Setter>
+            <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="PasswordBox">
-            <Setter Property="BorderBrush" Value="#FF6856AF"></Setter>
+            <Setter Property="BorderBrush" Value="#FF60C1D1"></Setter>
             <Setter Property="Padding" Value="3"></Setter>
         </Style>
     </Window.Resources>
