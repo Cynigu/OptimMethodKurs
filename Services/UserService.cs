@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Models;
 using ModelsView;
-using ProgramSystem.Bll.Services.Interfaces;
 using Repository.factories;
 using Repository.UOW;
+using Services.Interfaces;
 
 namespace Services
 {

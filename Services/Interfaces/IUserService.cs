@@ -1,7 +1,7 @@
 ﻿using System.Security;
 using ModelsView;
 
-namespace ProgramSystem.Bll.Services.Interfaces;
+namespace Services.Interfaces;
 
 public interface IUserService
 {
