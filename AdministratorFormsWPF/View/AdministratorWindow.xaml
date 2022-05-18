@@ -49,24 +49,31 @@
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="Margin" Value="3"></Setter>
+        </Style>
     </Window.Resources>
     <StackPanel>
-        <ComboBox Width="auto" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" ></ComboBox>
-        <GroupBox ScrollViewer.CanContentScroll="True" Header="Пользователи" Margin="0,5,0,5" Visibility="{Binding IsUsers, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="5,0,5,0" >
-                    <DataGrid ItemsSource ="{Binding Path=UsersTable, Mode=TwoWay}"
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsUsers, Converter={StaticResource BoolToVisibilityConverter}}">
+            <GroupBox ScrollViewer.CanContentScroll="True" Header="Таблица пользователей" Margin="0,5,0,5" >
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="5,0,5,0" >
+                        <DataGrid ItemsSource ="{Binding Path=UsersTable, Mode=TwoWay}"
                               SelectedItem="{Binding SelectedUserRow}"
                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
                               AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Header="Логин" Binding="{Binding Login}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить" Command="{Binding UpdateUsersListCommand}"></Button>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Логин" Binding="{Binding Login}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить" Command="{Binding UpdateUsersListCommand}"></Button>
+                    </StackPanel>
                 </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Редактирование">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Логин"></TextBlock>
@@ -79,7 +86,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Роль"></TextBlock>
                         <ComboBox  ItemsSource="{Binding Path=Roles}"    
-                                      SelectedItem="{Binding Path=SelectedRole}">
+                                   SelectedItem="{Binding Path=SelectedRole}">
                         </ComboBox>
                     </StackPanel>
                     <StackPanel>
@@ -89,8 +96,8 @@
                         <Button Content="Очистить поля" Command="{Binding ClearUserPropertiesCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
+            </GroupBox>
+        </StackPanel>
         <GroupBox Header="Параметры" Visibility="{Binding IsParameters, Converter={StaticResource BoolToVisibilityConverter}}"
                   ScrollViewer.CanContentScroll="True">
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5"  >
@@ -284,5 +291,6 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+        <ComboBox Width="auto" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" ></ComboBox>
     </StackPanel>
 </Window>
