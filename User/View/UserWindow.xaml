@@ -59,20 +59,6 @@
                               SelectedItem="{Binding GetcurrentMethod}"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="График" DockPanel.Dock="Top">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Шаг "></Label>
-                        <Label Content="{Binding XName}"></Label>
-                        <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
-                        <Label Content="Шаг "></Label>
-                        <Label Content="{Binding YName}"></Label>
-                        <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
-                    </StackPanel>
-                    <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
-                    <Button Content="Построить графики" Command="{Binding BuildGraphs}"/>
-                </StackPanel>
-            </GroupBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <!--<GroupBox Header="Шаги" 
@@ -244,7 +230,18 @@
                         </StackPanel>
                         <GroupBox Header="Блок вычсилений">
                             <StackPanel>
-                                <Button DockPanel.Dock="Top" Content="Вычислить" Width="auto" Command="{Binding Start}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Шаг "></Label>
+                                        <Label Content="{Binding XName}"></Label>
+                                        <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
+                                        <Label Content="Шаг "></Label>
+                                        <Label Content="{Binding YName}"></Label>
+                                        <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
+                                    </StackPanel>
+                                    <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
+                                </StackPanel>
+                            <Button DockPanel.Dock="Top" Content="Вычислить" Width="auto" Command="{Binding Start}"/>
                                 <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
                                          Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" Margin="0,3,0,0"/>
                             </StackPanel>

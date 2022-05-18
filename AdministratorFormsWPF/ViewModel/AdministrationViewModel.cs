@@ -85,7 +85,7 @@ namespace AdministratorFormsWPF.ViewModel
             Tables = new ObservableCollection<string>()
             {
                 "Пользователи", "Параметры", "Ед. измерения",
-                "Задачи оптимизации", "Методы оптимизации"
+                "Задачи оптимизации" , "Параметры задачи", "Методы оптимизации"
             };
             SelectedTable = "Пользователи";
         }
@@ -143,6 +143,7 @@ namespace AdministratorFormsWPF.ViewModel
         private bool isUnitsOfMeas;
         private bool isTasks;
         private bool isMethods;
+        private bool isParametersTasks;
 
         #endregion
 
@@ -175,6 +176,10 @@ namespace AdministratorFormsWPF.ViewModel
                     IsTasks = true;
                 if (selectedTable == "Методы оптимизации")
                     IsMethods = true;
+                if (selectedTable == "Параметры задачи")
+                {
+                    IsParametersTasks = true;
+                }
             }
         }
 
@@ -191,6 +196,7 @@ namespace AdministratorFormsWPF.ViewModel
                     IsUnitsOfMeas = false;
                     IsTasks = false;
                     IsMethods = false;
+                    IsParametersTasks = false;
                 }
             }
         }
@@ -208,6 +214,7 @@ namespace AdministratorFormsWPF.ViewModel
                     IsUnitsOfMeas = false;
                     IsTasks = false;
                     IsMethods = false;
+                    IsParametersTasks = false;
                 }
             }
         }
@@ -225,6 +232,7 @@ namespace AdministratorFormsWPF.ViewModel
                     //IsUnitsOfMeas = false;
                     IsTasks = false;
                     IsMethods = false;
+                    IsParametersTasks = false;
                 }
             }
         }
@@ -242,6 +250,24 @@ namespace AdministratorFormsWPF.ViewModel
                     IsUnitsOfMeas = false;
                     //IsTasks = false;
                     IsMethods = false;
+                    IsParametersTasks = false;
+                }
+            }
+        }
+
+        public bool IsParametersTasks
+        {
+            get => isParametersTasks;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isParametersTasks, value);
+                if (IsParametersTasks)
+                {
+                    IsUsers = false;
+                    IsParameters = false;
+                    IsUnitsOfMeas = false;
+                    IsTasks = false;
+                    IsMethods = false;
                 }
             }
         }
@@ -258,6 +284,7 @@ namespace AdministratorFormsWPF.ViewModel
                     IsParameters = false;
                     IsUnitsOfMeas = false;
                     IsTasks = false;
+                    IsParametersTasks = false;
                     //IsMethods = false;
                 }
             }
@@ -659,8 +686,6 @@ namespace AdministratorFormsWPF.ViewModel
         private async Task UpdateTaskTableAsync()
         {
             TasksTable = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
-            TasksComboBox = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
-            TasksForViewParametersComboBox = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
         }
         private async Task UpdateParameteresForTaskTableAsync()
         {
@@ -672,6 +697,8 @@ namespace AdministratorFormsWPF.ViewModel
             {
                 ParametersByTaskTable = new ObservableCollection<TaskParameterValueView>(await _tasksService.GetAllParametersAsync());
             }
+            TasksComboBox = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
+            TasksForViewParametersComboBox = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
             ParametersForTaskComboBox = new ObservableCollection<ParameterView>(await _parameterService.GetAllParametersAsync());
         }
 
@@ -699,17 +726,20 @@ namespace AdministratorFormsWPF.ViewModel
                 MessageBox.Show("Такая задача уже есть");
             }
             TasksTable = new ObservableCollection<TaskView>(await _tasksService.GetAllTaskAsync());
+            await UpdateTaskTableAsync();
         }
         private async Task DeleteTaskAsync()
         {
             if(SelectedTaskRow == null)
                 return;
             await _tasksService.DeleteTaskAsync(SelectedTaskRow.IdTask);
+            await UpdateTaskTableAsync();
         }
         private async Task EditTaskAsync()
         {
             if (!CanEditTask()) return;
             await _tasksService.EditTaskAsync(SelectedTaskRow.IdTask, TaskName, TaskDescroption);
+            await UpdateTaskTableAsync();
         }
         private async Task AddParameterByTaskAsync()
         {
@@ -720,6 +750,7 @@ namespace AdministratorFormsWPF.ViewModel
                 {
                     await _tasksService.AddParameterTaskAsync(SelectedParameterForTaskComboBox.Id ?? 0,
                         SelectedTaskComboBox.IdTask, ParameterByTaskValue ?? 0);
+                    await UpdateParameteresForTaskTableAsync();
                 }
                 catch
                 {
@@ -734,6 +765,7 @@ namespace AdministratorFormsWPF.ViewModel
             if (SelectedParameterByTaskRow != null)
                 await _tasksService.DeleteParameterTaskAsync(SelectedParameterByTaskRow.ParameterId,
                     SelectedParameterByTaskRow.TaskId);
+            await UpdateParameteresForTaskTableAsync();
         }
         private async Task EditParameterByTaskAsync()
         {
@@ -742,6 +774,7 @@ namespace AdministratorFormsWPF.ViewModel
             if (SelectedParameterByTaskRow != null)
                 await _tasksService.EditParameterTaskAsync(SelectedParameterByTaskRow.ParameterId,
                     SelectedParameterByTaskRow.TaskId, ParameterByTaskValue ?? 0);
+            await UpdateParameteresForTaskTableAsync();
         }
         #endregion
         #region Методы_пользователей
