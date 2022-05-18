@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using AdministratorFormsWPF.ViewModel;
 using Autofac;
-using ProgramSystem.Bll.Services.Interfaces;
 using Services.Interfaces;
 using User.Model;
 using User.ViewModel;

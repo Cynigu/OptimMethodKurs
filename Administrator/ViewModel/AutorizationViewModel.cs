@@ -3,8 +3,8 @@ using System.Security;
 using System.Windows;
 using AdministratorFormsWPF.View;
 using Autofac;
-using ProgramSystem.Bll.Services.Interfaces;
 using ReactiveUI;
+using Services.Interfaces;
 using Startup.Autofac;
 using User.View;
 

@@ -2,7 +2,7 @@
 using System.Windows.Threading;
 using Autofac;
 using AutofacDependence;
-using ProgramSystem.Bll.Services.Interfaces;
+using Services.Interfaces;
 using Startup.View;
 using Startup.ViewModel;
 

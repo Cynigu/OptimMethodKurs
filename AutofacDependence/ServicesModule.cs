@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
-using ProgramSystem.Bll.Services.Interfaces;
 using Repository.factories;
 using Services;
 using Services.Interfaces;
