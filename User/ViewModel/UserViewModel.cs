@@ -488,6 +488,7 @@ namespace User.ViewModel
                     YName = selectedTaskRealised.Y;
                     CFName = selectedTaskRealised.CF;
                     Getsing = selectedTaskRealised.sing;
+                    BuildGraphsMethod();
                 }
                 else
                 {
@@ -520,7 +521,12 @@ namespace User.ViewModel
         {
             this.taskservice = taskService;
             this.methodservice = metService;
-
+            StepGraphX = 0.1;
+            StepGraphY = 0.1;
+            PointOfStartX = -2.5;
+            PointOfStartY = 3;
+            StepForMethodX = 0.05;
+            StepForMethodY = 0.05;
             Getmethods = new(methodservice.GetAllOptimizationMethods()
                 .Where(x => x.IsRealized == true)
                 .Select(el => el));
@@ -544,13 +550,6 @@ namespace User.ViewModel
             Getymax = selectedTaskRealised?.Ymax ?? 3;
             Getε = selectedTaskRealised?.ε ?? 0.01;
 
-            StepGraphX = 0.1;
-            StepGraphY = 0.1;
-            PointOfStartX = -2.5;
-            PointOfStartY = 3;
-            StepForMethodX = 0.05;
-            StepForMethodY = 0.05;
-            
             ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
                 obj => SelectedParameter != null && ParameterByTaskValue != null
                 );
@@ -794,7 +793,7 @@ namespace User.ViewModel
                 {
                     for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
                     {
-                        chart3dData.Add(new Point3 {X = i, Y = j, Z = (float) task(new Point2 {X = i, Y = j})});
+                        chart3dData.Add(new Point3 {X = i, Y = j, Z = task(new Point2 {X = i, Y = j})});
                     }
                 }
 

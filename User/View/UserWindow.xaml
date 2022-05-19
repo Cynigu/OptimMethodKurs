@@ -7,7 +7,7 @@
         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
-        Title="Окно исследователя" Height="770" Width="960" WindowStartupLocation="CenterScreen" 
+        Title="Окно исследователя" Height="790" Width="1200" WindowStartupLocation="CenterScreen" 
         Background="#FFE6D1A9" Foreground="#FF297986" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -25,7 +25,7 @@
         <Style TargetType="wpfx:DoubleUpDown">
             <Setter Property="Width" Value="60"></Setter>
             <Setter Property="Margin" Value="3"></Setter>
-            <Setter Property="Height" Value="20"></Setter>
+            <Setter Property="Height" Value="25"></Setter>
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="TabItem">
@@ -36,51 +36,154 @@
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="Margin" Value="3"></Setter>
+            <Setter Property="Padding" Value="4"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
     </Window.Resources>
     <StackPanel>
         <Menu>
-            <MenuItem Header="File">
+            <MenuItem Header="Файл">
                 <MenuItem Header="Сохранить как..." Command="{Binding Saveresult}"/>
             </MenuItem>
-            <MenuItem Header="Help">
+            <MenuItem Header="Помощь">
                 <MenuItem Header="О программе..." Command="{Binding Reference}"/>
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Horizontal">
-            <GroupBox Header="Задача" >
-                <StackPanel>
-                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentTask}"/>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Метод оптимизации" DockPanel.Dock="Top">
-                <StackPanel>
-                    <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentMethod}"/>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="3">
-            <!--<GroupBox Header="Шаги" 
-                      Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
-                <StackPanel >
-                    <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Top">
-                        <TextBlock Text="X: " Width="20"></TextBlock>
-                        <wpfx:DoubleUpDown Value="{Binding StepForMethodX}"></wpfx:DoubleUpDown>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel>
+                <GroupBox Header="Задача" >
+                    <StackPanel>
+                        <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentTask}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBlock Text="Y: " Width="20"></TextBlock>
-                        <wpfx:DoubleUpDown Value="{Binding StepForMethodY}"></wpfx:DoubleUpDown>
+                </GroupBox>
+                <GroupBox Header="Метод оптимизации" DockPanel.Dock="Top">
+                    <StackPanel>
+                        <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentMethod}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel  Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel  Orientation="Horizontal">
+                        <GroupBox>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Экстремум "></TextBlock>
+                                    <ComboBox 
+                                    ItemsSource="{Binding Path = GetlistExtremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                    SelectedItem="{Binding Path = Getextremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Точность решения ε:"/>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center"
+                                                   Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    </wpfx:DoubleUpDown>
+                                </StackPanel>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                                            <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                                        </StackPanel>
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                                   Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                                            <Label HorizontalContentAlignment="Center" Content="{Binding YName}" Grid.Column="1"/>
+                                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                                        </StackPanel>
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                                   Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label HorizontalContentAlignment="Center" Content="{Binding YName}"/>
+                                        <Label Content="+"></Label>
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
+                                                   Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label HorizontalContentAlignment="Center" Content="*" Grid.Column="1"/>
+                                            <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                                        </StackPanel>
+                                        <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
+                                  ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
+                                                   Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Рабочий объем реактора V1: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = V1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Рабочий объем реактора V2: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = V2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Объемный расход А1: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = A1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Объемный расход А2: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = A2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Время: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Нормирующие множители">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Нормирующий множитель α: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                       Value="{Binding Path = NA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Нормирующий множитель β: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                       Value="{Binding Path = NB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Нормирующий множитель µ: "></Label>
+                                    <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                       Value="{Binding Path = NY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
                     </StackPanel>
                 </StackPanel>
-            </GroupBox>-->
+            </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel>
                 <TabControl>
                     <TabItem Header="2D график">
                         <StackPanel>
-                                <ig:XamDataChart Width="600" Height="610">
+                                <ig:XamDataChart Width="600" Height="500">
                                     <ig:XamDataChart.Axes>
                                         <ig:NumericXAxis x:Name="xAxis" Title="{Binding XName}"/>
                                         <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
@@ -111,7 +214,7 @@
                             </StackPanel>
                     </TabItem>
                     <TabItem Header="3D график">
-                        <ig:XamScatterSurface3D  Width="600" Height="615"
+                        <ig:XamScatterSurface3D  Width="600" Height="500"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
                             SeriesColorInterpolation="ARGB">
@@ -136,123 +239,18 @@
                 </TabControl>
                 
             </StackPanel>
-            <StackPanel Margin="5">
+            <StackPanel>
+                <GroupBox Header="Формализованное описание">
+                    <Image Height="250" Source="var15.png" Stretch="Fill" Width="500" Margin="3"/>
+                </GroupBox>
+                <GroupBox Header="Вычисления" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="Формализованное описание"></TextBlock>
-                            <Image Height="130" Source="var15.png" Stretch="Fill" Width="280" Margin="3"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Экстремум "></TextBlock>
-                            <ComboBox 
-                                      ItemsSource="{Binding Path = GetlistExtremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                      SelectedItem="{Binding Path = Getextremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Точность решения ε:"/>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center"
-                                                    Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                </wpfx:DoubleUpDown>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
-                                    <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
-                                    <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
-                                </StackPanel>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                                   Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
-                                    <Label HorizontalContentAlignment="Center" Content="{Binding YName}" Grid.Column="1"/>
-                                    <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
-                                </StackPanel>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                                   Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label HorizontalContentAlignment="Center" Content="{Binding YName}"/>
-                                <Label Content="+"></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                                   Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label HorizontalContentAlignment="Center" Content="*" Grid.Column="1"/>
-                                    <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
-                                </StackPanel>
-                                <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
-                                  ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
-                                                   Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Нормирующий множитель α: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = NA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Нормирующий множитель β: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = NB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Нормирующий множитель µ: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = NY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Рабочий объем реактора V1: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = V1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                            <Label Content="Рабочий объем реактора V2: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = V2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Объемный расход А1: "></Label>
-                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = A1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                        </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Объемный расход А2: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = A2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                                <Label Content="Время: "></Label>
-                                <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <GroupBox Header="Блок вычсилений">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Content="Шаг "></Label>
-                                        <Label Content="{Binding XName}"></Label>
-                                        <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
-                                        <Label Content="Шаг "></Label>
-                                        <Label Content="{Binding YName}"></Label>
-                                        <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
-                                    </StackPanel>
-                                    <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
-                                </StackPanel>
-                            <Button DockPanel.Dock="Top" Content="Вычислить" Width="auto" Command="{Binding Start}"/>
-                                <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
-                                         Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" Margin="0,3,0,0"/>
-                            </StackPanel>
-                        </GroupBox>
+                        <Button DockPanel.Dock="Top" Content="Вычислить" Width="auto" Command="{Binding Start}"/>
+                        <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
+                                 Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="auto"/>
                     </StackPanel>
-                </StackPanel>
+                </GroupBox>
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </Window>

@@ -93,7 +93,7 @@
     }
     internal class RegisterTask12 : ITask
     {
-        public ICollection<string> Names { get; set; } = new []{"Вариант 12"};
+        public ICollection<string> Names { get; set; } = new []{"Вариант 12", "Вариант 25"};
         public string UnitOfMeasCF { get; } = "кг";
         public string SourceImageFormDesc { get; } = "var15.png";
         public string CF { get; } = "S(T1, T2)";
