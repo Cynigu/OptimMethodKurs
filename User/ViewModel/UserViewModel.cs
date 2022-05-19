@@ -473,6 +473,7 @@ namespace User.ViewModel
                     YName = selectedTaskRealised.Y;
                     CFName = selectedTaskRealised.CF;
                     Getsing = selectedTaskRealised.sing;
+                    BuildGraphsMethod();
                 }
                 else
                 {
@@ -529,8 +530,8 @@ namespace User.ViewModel
             Getymax = selectedTaskRealised?.Ymax ?? 3;
             Getε = selectedTaskRealised?.ε ?? 0.01;
 
-            StepGraphX = 0.05;
-            StepGraphY = 0.05;
+            StepGraphX = 0.1;
+            StepGraphY = 0.1;
             PointOfStartX = -2.5;
             PointOfStartY = 3;
             StepForMethodX = 0.05;
