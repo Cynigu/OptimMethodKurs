@@ -328,7 +328,7 @@ namespace User.ViewModel
             {
                 this.RaiseAndSetIfChanged(ref extremum, value);
                 if (selectedTaskRealised != null)
-                    selectedTaskRealised.IsExtremMax = extremum == "локальный максимум" ? true : false;
+                    selectedTaskRealised.IsExtremMax = extremum == "Max" ? true : false;
             }
         }
         public string Getresult
@@ -355,13 +355,13 @@ namespace User.ViewModel
             tasksRealised = new ObservableCollection<ITask>(Tasklist.Tasks);
             Gettasks = new(taskservice.GetAllTask());
             GetlistSing = new() { "⩾", "⩽" };
-            GetlistExtremum = new() {"локальный максимум", "локальный минимум"};
+            GetlistExtremum = new() {"Max", "Min"};
             GetfunctionValue = new();
 
             GetcurrentTask = Gettasks[0];
             GetcurrentMethod = Getmethods[0];
             Getsing = selectedTaskRealised?.sing ?? "⩾"; 
-            Getextremum = selectedTaskRealised?.IsExtremMax ?? true ? "локальный максимум" : "локальный минимум";
+            Getextremum = selectedTaskRealised?.IsExtremMax ?? true ? "Max" : "Min";
             if (ParametersTable != null) selectedTaskRealised?.RegisterTask(ParametersTable.ToList());
 
             Getk = selectedTaskRealised?.k ?? 1;

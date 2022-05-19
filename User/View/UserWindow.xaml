@@ -53,7 +53,7 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
+            <GroupBox Header="Ограничения" DockPanel.Dock="Top">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Точность решения ε:"/>
