@@ -69,10 +69,11 @@ namespace User.ViewModel
         private double na;
         private double nb;
         private double ny;
-        private double v;
-        private double a;
-        private double g;
+        private double _v1;
+        private double _v2;
+        private double _a1;
         private double z;
+        private double a2;
         #endregion
 
         #region get; set
@@ -117,10 +118,11 @@ namespace User.ViewModel
                         NA = parametersTable.Single(x => x.Notation == "α").Value;
                         NB = parametersTable.Single(x => x.Notation == "β").Value;
                         NY = parametersTable.Single(x => x.Notation == "γ").Value;
-                        V = parametersTable.Single(x => x.Notation == "V").Value;
-                        A = parametersTable.Single(x => x.Notation == "A").Value;
-                        G = parametersTable.Single(x => x.Notation == "G").Value;
-                        Z = parametersTable.Single(x => x.Notation == "z").Value;
+                        V1 = parametersTable.Single(x => x.Notation == "V1").Value;
+                        V2 = parametersTable.Single(x => x.Notation == "V2").Value;
+                        A1 = parametersTable.Single(x => x.Notation == "A1").Value;
+                        A2 = parametersTable.Single(x => x.Notation == "A2").Value;
+                        Z = parametersTable.Single(x => x.Notation == "t").Value;
                     }
                 }
 
@@ -330,42 +332,55 @@ namespace User.ViewModel
                 }
             }
         }
-        public double V
+        public double V1
         {
-            get { return v; }
+            get { return _v1; }
             set
             {
-                this.RaiseAndSetIfChanged(ref v, value);
+                this.RaiseAndSetIfChanged(ref _v1, value);
                 if (ParametersTable != null)
                 {
-                    var param = ParametersTable.Single(x => x.Notation == "V");
-                    param.Value = v;
+                    var param = ParametersTable.Single(x => x.Notation == "V1");
+                    param.Value = _v1;
                 }
             }
         }
-        public double A
+        public double V2
         {
-            get { return a; }
+            get { return _v2; }
             set
             {
-                this.RaiseAndSetIfChanged(ref a, value);
+                this.RaiseAndSetIfChanged(ref _v2, value);
                 if (ParametersTable != null)
                 {
-                    var param = ParametersTable.Single(x => x.Notation == "A");
-                    param.Value = a;
+                    var param = ParametersTable.Single(x => x.Notation == "V2");
+                    param.Value = _v2;
                 }
             }
         }
-        public double G
+        public double A1
         {
-            get { return g; }
+            get { return _a1; }
             set
             {
-                this.RaiseAndSetIfChanged(ref g, value);
+                this.RaiseAndSetIfChanged(ref _a1, value);
                 if (ParametersTable != null)
                 {
-                    var param = ParametersTable.Single(x => x.Notation == "G");
-                    param.Value = g;
+                    var param = ParametersTable.Single(x => x.Notation == "A1");
+                    param.Value = _a1;
+                }
+            }
+        }
+        public double A2
+        {
+            get { return a2; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref a2, value);
+                if (ParametersTable != null)
+                {
+                    var param = ParametersTable.Single(x => x.Notation == "A2");
+                    param.Value = a2;
                 }
             }
         }
@@ -377,7 +392,7 @@ namespace User.ViewModel
                 this.RaiseAndSetIfChanged(ref z, value);
                 if (ParametersTable != null)
                 {
-                    var param = ParametersTable.Single(x => x.Notation == "z");
+                    var param = ParametersTable.Single(x => x.Notation == "t");
                     param.Value = z;
                 }
             }
@@ -533,8 +548,8 @@ namespace User.ViewModel
             StepGraphY = 0.05;
             PointOfStartX = -2.5;
             PointOfStartY = 3;
-            StepForMethodX = 0.05;
-            StepForMethodY = 0.05;
+            StepForMethodX = 0.1;
+            StepForMethodY = 0.1;
             
             ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
                 obj => SelectedParameter != null && ParameterByTaskValue != null
@@ -553,6 +568,7 @@ namespace User.ViewModel
         private RelayCommand reference;
         private RelayCommand saveresult;
         
+
         public RelayCommand ChangeValueCommand { get; set; }
         public ICommand Start
         {

@@ -4,33 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Окно администратора" MaxHeight="700" MaxWidth="1000" Background="#FFA6E9F4" Foreground="#FF297986">
+        Title="Окно администратора" MaxHeight="700" MaxWidth="1040" Background="#FFE6D1A9" Foreground="#FF297986">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style TargetType="Button">
             <Setter Property="Width" Value="auto"></Setter>
             <Setter Property="Height" Value="30"></Setter>
             <Setter Property="Margin" Value="0 3"></Setter>
-            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="Background" Value="#FF7EC7D2"></Setter>
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="0 3"></Setter>
             <Setter Property="Height" Value="22"></Setter>
-            <Setter Property="Width" Value="90"></Setter>
+            <Setter Property="Width" Value="110"></Setter>
         </Style>
         <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="0 3"></Setter>
+            <Setter Property="Margin" Value="3"></Setter>
             <Setter Property="Width" Value="150"></Setter>
             <Setter Property="BorderBrush" Value="#FF60C1D1"></Setter>
             <Setter Property="Padding" Value="3"></Setter>
         </Style>
         <Style TargetType="ComboBox">
-            <Setter Property="Margin" Value="0 3"></Setter>
+            <Setter Property="Margin" Value="3"></Setter>
             <Setter Property="Width" Value="150"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
             <Setter Property="BorderBrush" Value="#FF60C1D1"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
         </Style>
         <Style TargetType="CheckBox">
             <Setter Property="Margin" Value="0 3"></Setter>
@@ -52,29 +53,15 @@
         <Style TargetType="GroupBox">
             <Setter Property="FontSize" Value="15"></Setter>
             <Setter Property="Margin" Value="3"></Setter>
+            <Setter Property="Padding" Value="4"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
         </Style>
     </Window.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal" Visibility="{Binding IsUsers, Converter={StaticResource BoolToVisibilityConverter}}">
-            <GroupBox ScrollViewer.CanContentScroll="True" Header="Таблица пользователей" Margin="0,5,0,5" >
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Margin="5,0,5,0" >
-                        <DataGrid ItemsSource ="{Binding Path=UsersTable, Mode=TwoWay}"
-                              SelectedItem="{Binding SelectedUserRow}"
-                              CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                              AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Логин" Binding="{Binding Login}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="*" Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <Button Content="Обновить" Command="{Binding UpdateUsersListCommand}"></Button>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
             <GroupBox Header="Редактирование">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Логин"></TextBlock>
                         <TextBox Text="{Binding Login}"></TextBox>
@@ -97,37 +84,39 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-        </StackPanel>
-        <GroupBox Header="Параметры" Visibility="{Binding IsParameters, Converter={StaticResource BoolToVisibilityConverter}}"
-                  ScrollViewer.CanContentScroll="True">
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5"  >
-                <StackPanel Margin="5,0,5,0">
-                    <DataGrid ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
-                              SelectedItem="{Binding SelectedParameterRow}"
+            <GroupBox ScrollViewer.CanContentScroll="True" Header="Таблица пользователей" >
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=UsersTable, Mode=TwoWay}"
+                              SelectedItem="{Binding SelectedUserRow}"
                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                              VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить" Command="{Binding UpdateParametersCommand}"></Button>
+                              AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Логин" Binding="{Binding Login}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Роль" Binding="{Binding Role}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить" Command="{Binding UpdateUsersListCommand}"></Button>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsParameters, Converter={StaticResource BoolToVisibilityConverter}}">
+            <GroupBox Header="Редактирвоание">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Описание"></TextBlock>
                         <TextBox Text="{Binding ParameterName}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Обозначение"></TextBlock>
+                        <TextBlock Text="Об-е"></TextBlock>
                         <TextBox Text="{Binding Notation}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Ед. измерения"></TextBlock>
+                        <TextBlock Text="Ед-ца изм-я"></TextBlock>
                         <ComboBox ItemsSource="{Binding Path=UnitsOfMeasComboBox}"    
-                                      SelectedItem="{Binding Path=SelectedUnitOfMeas}">
+                                  SelectedItem="{Binding Path=SelectedUnitOfMeas}">
                         </ComboBox>
                     </StackPanel>
                     <StackPanel>
@@ -137,23 +126,29 @@
                         <Button Content="Очистить поля" Command="{Binding ClearParameterPropertiesCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Ед. измерения" Visibility="{Binding IsUnitsOfMeas, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
-                <StackPanel Margin="5,0,5,0">
-                    <DataGrid ItemsSource ="{Binding Path=UnitOfMeasTable, Mode=TwoWay}"
-                              SelectedItem="{Binding SelectedUnitOfMeasRow}"
+            </GroupBox>
+            <GroupBox Header="Параметры" >
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
+                              SelectedItem="{Binding SelectedParameterRow}"
                               CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                              AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить" Command="{Binding UpdateUnitOfMeasTableCommand}"></Button>
+                              VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить" Command="{Binding UpdateParametersCommand}"></Button>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsUnitsOfMeas, Converter={StaticResource BoolToVisibilityConverter}}">
+            <GroupBox Header="Редактирование">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Наименование"></TextBlock>
                         <TextBox Text="{Binding UnitOfMeasName}"></TextBox>
@@ -164,23 +159,27 @@
                         <Button Content="Очистить поля" Command="{Binding ClearUnitOfMeasCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Список задач"  Visibility="{Binding IsTasks, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                <StackPanel Margin="5,0,5,0">
-                    <DataGrid ItemsSource ="{Binding Path=TasksTable, Mode=TwoWay}"
-                                      SelectedItem="{Binding SelectedTaskRow}"
-                                      CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                                      AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить таблицу" Command="{Binding UpdateTasksTableCommand}"></Button>
+            </GroupBox>
+            <GroupBox Header="Единицы измерения" >
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=UnitOfMeasTable, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedUnitOfMeasRow}"
+                                  CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить" Command="{Binding UpdateUnitOfMeasTableCommand}"></Button>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsTasks, Converter={StaticResource BoolToVisibilityConverter}}">
+            <GroupBox Header="Редактирование">
+                <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Наименование"></TextBlock>
                         <TextBox Text="{Binding TaskName}"></TextBox>
@@ -188,8 +187,8 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Описание"></TextBlock>
                         <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
-                                         TextWrapping="Wrap" MaxHeight="200"
-                                         Text="{Binding TaskDescroption}"></TextBox>
+                                 TextWrapping="Wrap" MaxHeight="200"
+                                 Text="{Binding TaskDescroption}"></TextBox>
                     </StackPanel>
                     <StackPanel>
                         <Button Content="Добавить" Command="{Binding AddTaskCommand}"></Button>
@@ -198,48 +197,39 @@
                         <Button Content="Очистить поля" Command="{Binding ClearTaskPropertiesCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Параметры задачи" Visibility="{Binding IsParametersTasks, Converter={StaticResource BoolToVisibilityConverter}}" >
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                <StackPanel Margin="5,0,5,0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Список параметров по задаче" Width="auto"></TextBlock>
-                        <ComboBox Margin="5 3" 
-                                              ItemsSource="{Binding TasksForViewParametersComboBox}"
-                                              SelectedItem="{Binding SelectedTaskForViewParameters}"
-                                              DisplayMemberPath="Name"></ComboBox>
-                    </StackPanel>
-                    <DataGrid ItemsSource ="{Binding Path=ParametersByTaskTable, Mode=TwoWay}"
-                                          SelectedItem="{Binding SelectedParameterByTaskRow}"
-                                          CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                                          AutoGenerateColumns="False" MaxWidth="600">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn  Header="ID пар-ра" Binding="{Binding ParameterId}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Знач-е" Binding="{Binding Value}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить таблицу" Command="{Binding UpdateParametersForTaskTableCommand}"></Button>
+            </GroupBox>
+            <GroupBox Header="Список задач">
+                <StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=TasksTable, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedTaskRow}"
+                                      CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                                      AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить таблицу" Command="{Binding UpdateTasksTableCommand}"></Button>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsParametersTasks, Converter={StaticResource BoolToVisibilityConverter}}" >
+            <GroupBox Header="Редактирование">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <GroupBox Header="Параметр" ScrollViewer.CanContentScroll="True" 
-                                          ScrollViewer.HorizontalScrollBarVisibility="Auto" MaxWidth="330">
-                            <DataGrid ItemsSource="{Binding ParametersForTaskComboBox}"
+                        <TextBlock Text="Параметр" ScrollViewer.CanContentScroll="True" 
+                                          ScrollViewer.HorizontalScrollBarVisibility="Auto" MaxWidth="330"></TextBlock>
+                        <DataGrid ItemsSource="{Binding ParametersForTaskComboBox}"
                                                   SelectedItem="{Binding SelectedParameterForTaskComboBox}" 
-                                                  Height="200" AutoGenerateColumns="False" 
+                                                  Height="200" AutoGenerateColumns="False" Width="260"
                                                   IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                                    <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Е-ца из-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </GroupBox>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Е-ца из-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Задача"></TextBlock>
@@ -258,23 +248,35 @@
                         <Button Content="Очистить поля" Command="{Binding ClearTaskPropertiesCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Методы" Visibility="{Binding IsMethods, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
-                <StackPanel Margin="5,0,5,0">
-                    <DataGrid ItemsSource ="{Binding Path=OptimizationMethodsTable, Mode=TwoWay}"
-                              SelectedItem="{Binding SelectedOptimizationMethodRow}"
-                              CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
-                              AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Реализация" Binding="{Binding IsRealized}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Content="Обновить" Command="{Binding UpdateTableOptimizationMethodCommand}"></Button>
+            </GroupBox>
+            <GroupBox Header="Параметры задачи">
+                <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Задача: " Width="auto"></TextBlock>
+                            <ComboBox
+                                              ItemsSource="{Binding TasksForViewParametersComboBox}"
+                                              SelectedItem="{Binding SelectedTaskForViewParameters}"
+                                              DisplayMemberPath="Name"></ComboBox>
+                        </StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=ParametersByTaskTable, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedParameterByTaskRow}"
+                                          CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                                          AutoGenerateColumns="False" MaxWidth="600">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Header="ID пар-ра" Binding="{Binding ParameterId}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Наименование" Binding="{Binding Description}"></DataGridTextColumn>
+                                <DataGridTextColumn  Header="Об-е" Binding="{Binding Notation}"></DataGridTextColumn>
+                                <DataGridTextColumn  Header="Е-ца изм-я" Binding="{Binding UnitOfMeasName}"></DataGridTextColumn>
+                                <DataGridTextColumn  Header="Знач-е" Binding="{Binding Value}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить таблицу" Command="{Binding UpdateParametersForTaskTableCommand}"></Button>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0">
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsMethods, Converter={StaticResource BoolToVisibilityConverter}}">
+            <GroupBox Header="Редактирование">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Наименование"></TextBlock>
                         <TextBox Text="{Binding MethodOptimizationName}"></TextBox>
@@ -289,8 +291,24 @@
                         <Button Content="Очистить поля" Command="{Binding ClearPropertiesMehodsOptimizationCommand}"></Button>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Методы" >
+                <StackPanel>
+                        <DataGrid ItemsSource ="{Binding Path=OptimizationMethodsTable, Mode=TwoWay}"
+                              SelectedItem="{Binding SelectedOptimizationMethodRow}"
+                              CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                              AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Реализация" Binding="{Binding IsRealized}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Обновить" Command="{Binding UpdateTableOptimizationMethodCommand}"></Button>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <GroupBox Header="Выбор таблицы" >
+            <ComboBox Width="auto" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" ></ComboBox>
         </GroupBox>
-        <ComboBox Width="auto" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" ></ComboBox>
     </StackPanel>
 </Window>

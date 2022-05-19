@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Авторизация" Height="200" Width="310" Background="#FFA6E9F4" Foreground="#FF297986" WindowStartupLocation="CenterScreen">
+        Title="Авторизация" Height="200" Width="310" Background="#FFE0CDA9" Foreground="#FF297986" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="BorderBrush" Value="#FF60C1D1"></Setter>
@@ -13,8 +13,8 @@
         <Style TargetType="Button">
             <Setter Property="Width" Value="auto"></Setter>
             <Setter Property="Height" Value="40"></Setter>
-            <Setter Property="Background" Value="#FF60C1D1"></Setter>
-            <Setter Property="BorderBrush" Value="#FF297986"></Setter>
+            <Setter Property="Background" Value="#FF7EC7D2"></Setter>
+            <Setter Property="BorderBrush" Value="#FF57B8C8"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="PasswordBox">

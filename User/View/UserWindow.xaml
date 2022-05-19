@@ -8,13 +8,13 @@
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
         Title="Окно исследователя" Height="770" Width="960" WindowStartupLocation="CenterScreen" 
-        Background="#FFA6E9F4" Foreground="#FF297986" >
+        Background="#FFE6D1A9" Foreground="#FF297986" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"></Setter>
             <Setter Property="Width" Value="200"></Setter>
-            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="Background" Value="#FF7EC7D2"></Setter>
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
@@ -29,7 +29,7 @@
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
         </Style>
         <Style TargetType="TabItem">
-            <Setter Property="Background" Value="#FF60C1D1"></Setter>
+            <Setter Property="Background" Value="#FF7EC7D2"></Setter>
             <Setter Property="BorderBrush" Value="#FF297986"></Setter>
             <Setter Property="Foreground" Value="#FF297986"></Setter>
         </Style>
@@ -208,22 +208,27 @@
                                                    Value="{Binding Path = NY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Рабочий объем реактора V: "></Label>
+                                <Label Content="Рабочий объем реактора V1: "></Label>
                                 <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = V, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                                   Value="{Binding Path = V1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Давление в реакторе А: "></Label>
+                            <Label Content="Рабочий объем реактора V2: "></Label>
                                 <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = A, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                                   Value="{Binding Path = V2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                             </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Объемный расход А1: "></Label>
+                            <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
+                                                   Value="{Binding Path = A1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                        </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Кол-во  реакционной массы в реакторе G: "></Label>
+                                <Label Content="Объемный расход А2: "></Label>
                                 <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                                   Value="{Binding Path = G, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                                                   Value="{Binding Path = A2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Затраты на очистку реакционной массы: "></Label>
+                        <StackPanel Orientation="Horizontal">
+                                <Label Content="Время: "></Label>
                                 <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
                                                    Value="{Binding Path = Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
                             </StackPanel>
