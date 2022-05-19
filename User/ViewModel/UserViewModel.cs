@@ -544,12 +544,12 @@ namespace User.ViewModel
             Getymax = selectedTaskRealised?.Ymax ?? 3;
             Getε = selectedTaskRealised?.ε ?? 0.01;
 
-            StepGraphX = 0.05;
-            StepGraphY = 0.05;
+            StepGraphX = 0.1;
+            StepGraphY = 0.1;
             PointOfStartX = -2.5;
             PointOfStartY = 3;
-            StepForMethodX = 0.1;
-            StepForMethodY = 0.1;
+            StepForMethodX = 0.05;
+            StepForMethodY = 0.05;
             
             ChangeValueCommand = new RelayCommand(obj => ChangeValue(), 
                 obj => SelectedParameter != null && ParameterByTaskValue != null
