@@ -110,7 +110,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label HorizontalContentAlignment="Center" Content="{Binding YName}"/>
-                                        <Label Content="+"></Label>
+                                        <Label Content="-"></Label>
                                         <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
                                                    Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         <StackPanel Orientation="Horizontal">
