@@ -7,7 +7,7 @@
         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
-        Title="Окно исследователя" Height="770" Width="960" WindowStartupLocation="CenterScreen" 
+        Title="Окно исследователя" Height="800" Width="960" WindowStartupLocation="CenterScreen" 
         Background="#FF7265A6" Foreground="White" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -35,6 +35,8 @@
         </Style>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Background" Value="#FF772686"></Setter>
+            <Setter Property="Margin" Value="2"></Setter>
         </Style>
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="#FF7265A6"></Setter>
@@ -99,7 +101,7 @@
                 <TabControl>
                     <TabItem Header="2D график">
                         <StackPanel>
-                                <ig:XamDataChart Width="600" Height="610">
+                                <ig:XamDataChart Width="600" Height="655">
                                     <ig:XamDataChart.Axes>
                                         <ig:NumericXAxis x:Name="xAxis" Title="{Binding XName}"/>
                                         <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
@@ -130,7 +132,7 @@
                             </StackPanel>
                     </TabItem>
                     <TabItem Header="3D график">
-                        <ig:XamScatterSurface3D  Width="600" Height="615"
+                        <ig:XamScatterSurface3D  Width="600" Height="660"
                             ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
                             SeriesColorInterpolation="ARGB">
