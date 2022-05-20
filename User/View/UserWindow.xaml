@@ -241,7 +241,7 @@
             </StackPanel>
             <StackPanel>
                 <GroupBox Header="Формализованное описание">
-                    <Image Height="250" Source="var15.png" Stretch="Fill" Width="500" Margin="3"/>
+                    <Image Height="250" Source="var12.png" Stretch="Fill" Width="500" Margin="3"/>
                 </GroupBox>
                 <GroupBox Header="Вычисления" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <StackPanel>

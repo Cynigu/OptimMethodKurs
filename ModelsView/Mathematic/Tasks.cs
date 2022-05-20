@@ -95,7 +95,7 @@
     {
         public ICollection<string> Names { get; set; } = new []{"Вариант 12", "Вариант 25"};
         public string UnitOfMeasCF { get; } = "кг";
-        public string SourceImageFormDesc { get; } = "var15.png";
+        public string SourceImageFormDesc { get; } = "var12.png";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
