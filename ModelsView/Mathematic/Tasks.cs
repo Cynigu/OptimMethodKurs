@@ -98,7 +98,7 @@
         public string NameRealisation => nameof(RegisterTask12);
         public string NameTask => "Вариант 12";
         public string UnitOfMeasCF => "кг";
-        public string SourceImageFormDesc => "var15.png";
+        public string SourceImageFormDesc => "var12.png";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
@@ -179,7 +179,7 @@
         private double z;
         public double G { get; set; }
         public string UnitOfMeasCF { get; } = "у.е.";
-        public string SourceImageFormDesc { get; } = "var15.png";
+        public string SourceImageFormDesc { get; } = "var13.png";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
