@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="View\var13.jpg" />
     <None Remove="View\var15.png" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="View\var13.jpg" />
     <Resource Include="View\var15.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
