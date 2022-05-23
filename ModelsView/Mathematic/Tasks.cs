@@ -43,7 +43,7 @@
 
         private double a;
         private double β;
-        private double y;
+        private double γ;
         private double p1;
         private double p2;
         private double N;
@@ -59,7 +59,7 @@
                 .Select(el=>el.Value).Single();
             this.β = parameters.Where(x => x.Notation == "β")
                 .Select(el => el.Value).Single();
-            this.y = parameters.Where(x => x.Notation == "γ")
+            this.γ = parameters.Where(x => x.Notation == "γ")
                 .Select(el => el.Value).Single();
             this.p1 = parameters.Where(x => x.Notation == "∆р1")
                 .Select(el => el.Value).Single();
@@ -89,7 +89,7 @@
         public double GetValueCF(Point2 point)
         {
             double sqrt = Math.Sqrt(Math.Pow(point.X, N) + Math.Pow(point.Y, N));
-            double FunctionValue = a * (point.X - β * p1) * Math.Cos(y * p2 * sqrt);
+            double FunctionValue = a * (point.X - β * p1) * Math.Cos(γ * p2 * sqrt);
             return FunctionValue * t;
         }
     }
@@ -98,7 +98,7 @@
         public string NameRealisation => nameof(RegisterTask12);
         public string NameTask => "Вариант 12";
         public string UnitOfMeasCF => "кг";
-        public string SourceImageFormDesc => "var12.png";
+        public string SourceImageFormDesc => "var12.jpg";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
@@ -177,9 +177,9 @@
         private double A;
         private double V;
         private double z;
-        public double G { get; set; }
+        public double G;
         public string UnitOfMeasCF { get; } = "у.е.";
-        public string SourceImageFormDesc { get; } = "var13.png";
+        public string SourceImageFormDesc { get; } = "var13.jpg";
         public string CF { get; } = "S(T1, T2)";
         public string X { get; } = "T1";
         public string Y { get; } = "T2";
@@ -242,7 +242,7 @@
         public string NameRealisation => nameof(RegisterTask14);
         public string NameTask => "Вариант 14";
         public string UnitOfMeasCF { get; } = "кг";
-        public string SourceImageFormDesc { get; } = "var15.png";
+        public string SourceImageFormDesc { get; } = "var14.png";
         public string CF { get; } = "S(A1, A2)";
         public string X { get; } = "A1";
         public string Y { get; } = "A2";

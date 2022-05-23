@@ -615,9 +615,9 @@ namespace User.ViewModel
             //float step = 0.1f;
             ObservableCollection<Point3> chart3dData = new();
             if (selectedTaskRealised != null)
-                for (double i = (selectedTaskRealised.Xmin); i < selectedTaskRealised.Xmax; i += stepX)
+                for (double i = (selectedTaskRealised.Xmin); i <= selectedTaskRealised.Xmax; i += stepX)
                 {
-                    for (double j = (selectedTaskRealised.Ymin); j < selectedTaskRealised.Ymax; j += stepY)
+                    for (double j = (selectedTaskRealised.Ymin); j <= selectedTaskRealised.Ymax; j += stepY)
                     {
                         chart3dData.Add(new Point3 {X = i, Y = j, Z = task(new Point2 {X = i, Y = j})});
                     }

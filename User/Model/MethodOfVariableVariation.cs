@@ -86,6 +86,7 @@ internal class MethodOfVariableVariation: IMethod
         Point2? prewPrewPoinr = null;
         do
         {
+            // 
             if (prewPrewPoinr != null && Math.Abs(prewPrewPoinr.FunctionValue - extremPoint.FunctionValue) < this.ε)
             {
                 stepX = stepX > 0.1 ? stepX - 0.1: stepX = 0.5;
@@ -397,7 +398,7 @@ internal class MethodOfVariableVariation: IMethod
                 if (!CheckConditionFirstKind(point.X, point.Y)
                     || !CheckConditionSecondKind(point.X, point.Y, sing))
                 {
-                    //// Провекрка что не вышли за ограничения 2ого рода
+                    // Провекрка что не вышли за ограничения 2ого рода
                     if (!CheckConditionSecondKind(point.X, point.Y, sing))
                     {
                         point.Y = k * point.X + b;

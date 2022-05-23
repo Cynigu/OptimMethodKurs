@@ -184,6 +184,7 @@
                                             YMemberPath="Y"
                                             ItemsSource="{Binding Getchart2Ddata}"/>
                                         <ig:ScatterSeries 
+                                            Thickness="3"
                                             XAxis="{Binding ElementName=xAxis}"
                                             YAxis="{Binding ElementName=yAxis}"
                                             XMemberPath="X"
@@ -233,12 +234,15 @@
                 </TabControl>
             </StackPanel>
             <TabControl Margin="5,0,5,0">
-                <TabItem Header="Описание задачи">
-                    <StackPanel>
-                        <TextBlock Text="Формализованное описание"></TextBlock>
-                        <Image Height="200" Source="{Binding SourceImageFormDesc}" Stretch="Fill" Width="510" Margin="3"/>
-                        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}" TextWrapping="Wrap" Width="510" Height="195"></TextBox>
-                    </StackPanel>
+                <TabItem Header="Описание задачи" >
+                    <DockPanel MaxHeight="410" MaxWidth="500" VerticalAlignment="Top">
+                        <GroupBox DockPanel.Dock="Top" Header="Формализованное описание" MaxHeight="230">
+                            <Image Source="{Binding SourceImageFormDesc}"  />
+                        </GroupBox>
+                        <TextBox DockPanel.Dock="Bottom" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+                                 AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}"
+                                 TextWrapping="Wrap" MaxWidth="500"></TextBox>
+                    </DockPanel>
                 </TabItem>
                 <TabItem Header="Значения">
                     <StackPanel>

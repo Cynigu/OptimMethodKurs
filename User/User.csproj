@@ -31,8 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="View\var12.jpg" />
-    <Resource Include="View\var13.jpg" />
+    <Resource Include="View\var12.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\var13.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="View\var15.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
