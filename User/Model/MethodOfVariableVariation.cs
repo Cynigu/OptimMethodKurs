@@ -9,7 +9,7 @@ namespace User.Model;
 /// </summary>
 internal class MethodOfVariableVariation: IMethod
 {
-    public string? Name { get; } = "Метод поочередного варьирования переменных";
+    public string? Name { get; } = "Метод поочередного варьирования переменных с учетом ограничений 1ого и 2ого рода";
     private bool isExtremMax; // true - локальный максимум, false - минимум
     private double ε; // точность
     private task task; // задача

@@ -39,7 +39,7 @@
                                   SelectedItem="{Binding GetcurrentTask}"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Метода оптимизации" DockPanel.Dock="Top">
+                <GroupBox Header="Метод оптимизации" DockPanel.Dock="Top">
                     <StackPanel>
                         <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
                                   SelectedItem="{Binding GetcurrentMethod}"/>

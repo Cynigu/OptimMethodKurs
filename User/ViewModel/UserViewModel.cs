@@ -262,7 +262,7 @@ namespace User.ViewModel
             set
             {
                 this.RaiseAndSetIfChanged(ref currentMethod, value);
-                if (currentMethod.Name == "Метод поочередного варьирования переменных")
+                if (currentMethod.Name == "Метод поочередного варьирования переменных с учетом ограничений 1ого и 2ого рода")
                 {
                     IsVariableParametersMethod = true;
                 }
