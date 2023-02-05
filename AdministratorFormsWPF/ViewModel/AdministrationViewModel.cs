@@ -1,10 +1,10 @@
-﻿using ProgramSystem.Bll.Services.Interfaces;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using ModelsView;
+using ModelsView.Mathematic;
 using Services.Interfaces;
 using ServicesMVVM;
 
@@ -30,6 +30,8 @@ namespace AdministratorFormsWPF.ViewModel
             _parameterService = parameterService;
             _tasksService = tasksService;
             _unitOfMeasService = unitOfMeasService;
+
+            TaskRealList = new ObservableCollection<ITask>(Tasklist.Tasks);
 
             // Пользователь
             UsersTable = new ObservableCollection<UserView>(_userService.GetAllUsers());
@@ -127,11 +129,25 @@ namespace AdministratorFormsWPF.ViewModel
         private TaskParameterValueView? _selectedParameterByTaskRow;
         private TaskView? _selectedTaskForViewParameters;
         private ObservableCollection<TaskView>? _tasksForViewParametersComboBox;
+
+        private ObservableCollection<ITask>? taskRealList;
+        private ITask? selectedTaskReal;
         #endregion
 
 
         #region Properties
 
+        public ObservableCollection<ITask>? TaskRealList
+        {
+            get => taskRealList;
+            set => this.RaiseAndSetIfChanged(ref taskRealList, value);
+        }
+
+        public ITask? SelectedTaskReal
+        {
+            get => selectedTaskReal;
+            set => this.RaiseAndSetIfChanged(ref selectedTaskReal, value);
+        }
         #region Задачи
 
         public string? TaskName
@@ -154,6 +170,8 @@ namespace AdministratorFormsWPF.ViewModel
                 {
                     TaskName = _selectedTaskRow.Name;
                     TaskDescroption = _selectedTaskRow.Description;
+                    if (TaskRealList != null)
+                        SelectedTaskReal = TaskRealList.FirstOrDefault(x => x.NameTask == _selectedTaskRow.BaseRealization);
                 }
                 else
                 {
@@ -560,7 +578,18 @@ namespace AdministratorFormsWPF.ViewModel
                 return;
             try
             {
-                await _tasksService.AddTaskAsync(TaskName, TaskDescroption);
+                string? nameReal = SelectedTaskReal?.NameTask;
+
+                var taskIdAdded = await _tasksService.AddTaskAsync(TaskName, TaskDescroption, nameReal);
+                if (nameReal != null)
+                {
+                    var parameters = (await _tasksService.GetAllParametersAsync())
+                        .Where(x => x.TaskName == nameReal);
+                    foreach (var parameter in parameters)
+                    {
+                        await _tasksService.AddParameterTaskAsync(parameter.ParameterId, taskIdAdded, parameter.Value);
+                    }
+                }
             }
             catch
             {
@@ -577,7 +606,21 @@ namespace AdministratorFormsWPF.ViewModel
         private async Task EditTaskAsync()
         {
             if (!CanEditTask()) return;
-            await _tasksService.EditTaskAsync(SelectedTaskRow.IdTask, TaskName, TaskDescroption);
+            string? nameReal = null;
+            try
+            {
+                SelectedTaskReal?.RegisterTask(_tasksService.GetAllParametersValues()
+                    .Where(x => x.TaskName == TaskName).ToList());
+                nameReal = SelectedTaskReal?.NameTask;
+            }
+            catch
+            {
+                MessageBox.Show("Задача не может быть реализована с помощью этого класса, " +
+                                "так как её параметры не соответсвуют нужным!");
+                nameReal = null;
+            }
+
+            await _tasksService.EditTaskAsync(SelectedTaskRow.IdTask, TaskName, TaskDescroption, nameReal);
         }
         private async Task AddParameterByTaskAsync()
         {

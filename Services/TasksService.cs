@@ -28,7 +28,8 @@ namespace Services
                 {
                     Description = x.Description,
                     IdTask = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    BaseRealization = x.RealizationName
                 }).ToListAsync();
             return tasks;
         }
@@ -42,18 +43,25 @@ namespace Services
                     Description = x.Description,
                     IdTask = x.Id,
                     Name = x.Name,
+                    BaseRealization = x.RealizationName
                 }).ToList();
             return tasks;
         }
 
-        public async Task AddTaskAsync(string name, string desc)
+        public async Task<int> AddTaskAsync(string name, string desc, string? realizationName)
         {
             using var uow = new UnitOfWork(_repositoryContext.Create());
+            if (uow.TasksRepository.GetEntityQuery().Count(x => x.Name == name) > 0)
+                throw new ArgumentException("Задача с таким вариантом уже есть!");
             await uow.TasksRepository.AddAsync(new DescriptionTask()
             {
                 Description = desc,
-                Name = name
+                Name = name,
+                RealizationName = realizationName
             });
+
+            int id = uow.TasksRepository.GetEntityQuery().Single(x => x.Name == name).Id;
+            return id;
         }
 
         public async Task DeleteTaskAsync(int idTask)
@@ -62,14 +70,17 @@ namespace Services
             await uow.TasksRepository.RemoveRangeAsync(x => x.Id == idTask);
         }
 
-        public async Task EditTaskAsync(int idTask, string name, string desc)
+        public async Task EditTaskAsync(int idTask, string name, string desc, string? realizationName)
         {
             using var uow = new UnitOfWork(_repositoryContext.Create());
+            if (uow.TasksRepository.GetEntityQuery().Count(x => x.Name == name && x.Id != idTask) > 0)
+                throw new ArgumentException("Задача с таким вариантом уже есть!");
             await uow.TasksRepository.UpdateAsync(new DescriptionTask()
             {
                 Id = idTask,
                 Name = name,
-                Description = desc
+                Description = desc,
+                RealizationName = realizationName
             });
         }
 

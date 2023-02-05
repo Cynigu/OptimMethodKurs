@@ -7,141 +7,268 @@
         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:User"
         mc:Ignorable="d"
-        Title="Решение оптимизационных задач" Height="610" Width="800" WindowStartupLocation="CenterScreen" >
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top">
-            <ToolBar VerticalAlignment="Top">
-                <!--<Button Content="⇐"/>-->
-                <Separator />
-                <Button Content="Сохранить как..." Command="{Binding Saveresult}"/>
-                <Separator />
-                <Button Content="Справка" Command="{Binding Reference}"/>
-                <Separator />
-            </ToolBar>
-        </DockPanel>
-        <DockPanel DockPanel.Dock="Right">
-            <GroupBox Header="Выбор задачи" DockPanel.Dock="Top">
-                <DockPanel Margin="5, 5, 5, 5">
-                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentTask}"/>
-                    <Label DockPanel.Dock="Top" Content="Описание задачи"></Label>
-                    <Button DockPanel.Dock="Top" Content="Объект оптимизации (описание задачи)"
-                            Command="{Binding TaskDescription}"/>
-                </DockPanel>
-            </GroupBox>
-            <GroupBox Header="Выбор метода оптимизации" DockPanel.Dock="Top">
-                <DockPanel Margin="5, 5, 5, 5">
-                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
-                              SelectedItem="{Binding GetcurrentMethod}"/>
-                </DockPanel>
-            </GroupBox>
-            <GroupBox Header="Определение ограничений" DockPanel.Dock="Top">
+        Title="Окно исследователя" Height="700" Width="1020" WindowStartupLocation="CenterScreen" >
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"></Setter>
+            <Setter Property="Width" Value="200"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Width" Value="200"></Setter>
+        </Style>
+        <Style TargetType="wpfx:DoubleUpDown">
+            <Setter Property="Width" Value="60"></Setter>
+            <Setter Property="Height" Value="20"></Setter>
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Сохранить как..." Command="{Binding Saveresult}"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="О программе..." Command="{Binding Reference}"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <StackPanel>
+                <GroupBox Header="Задача" >
+                    <StackPanel>
+                        <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Gettasks}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentTask}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Метод оптимизации" DockPanel.Dock="Top">
+                    <StackPanel>
+                        <ComboBox ItemsSource="{Binding Getmethods}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding GetcurrentMethod}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Экстремум">
+                    <StackPanel>
+                        <ComboBox HorizontalContentAlignment="Center"
+                                  ItemsSource="{Binding Path = GetlistExtremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Path = Getextremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <GroupBox Header="Ограничения" DockPanel.Dock="Top">
                 <StackPanel>
-                    <Grid Margin="5,5,5,5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="23"/>
-                            <RowDefinition Height="23"/>
-                            <RowDefinition Height="26"/>
-                            <RowDefinition Height="250*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70*"/>
-                            <ColumnDefinition Width="40*"/>
-                            <ColumnDefinition Width="70*"/>
-                        </Grid.ColumnDefinitions>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                           Value="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label HorizontalContentAlignment="Center" Content="⩾ Х ⩾" Grid.Column="1"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" 
-                                           Value="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                        <Label HorizontalContentAlignment="Center" Content="⩾ Y ⩾" Grid.Column="1" Grid.Row="1"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
-                        <Label HorizontalContentAlignment="Center" Content="Погрешность расчетов ε:" Grid.Row="2" Grid.ColumnSpan="2"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2" Grid.Row="2" Minimum="0.000001" Maximum="1"
-                                           Value="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                    <Grid Margin="5,5,5,5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="23"/>
-                            <RowDefinition Height="302*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20*"/>
-                            <ColumnDefinition Width="70*"/>
-                            <ColumnDefinition Width="70*"/>
-                            <ColumnDefinition Width="40*"/>
-                            <ColumnDefinition Width="70*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label HorizontalContentAlignment="Center" Content="Y"/>
-                        <ComboBox HorizontalContentAlignment="Center" Grid.Column="1" 
-                                  ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="2"
-                                           Value="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label HorizontalContentAlignment="Center" Content="X +" Grid.Column="3"/>
-                        <wpfx:DoubleUpDown HorizontalContentAlignment="Center" Grid.Column="4"
-                                           Value="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Точность решения ε:"/>
+                        <Label HorizontalContentAlignment="Center"
+                                           Content="{Binding Path = Getε, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" 
+                                               Content="{Binding Path = Getxmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                            <Label x:Name="xname" HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                        </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getxmax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" 
+                                               Content="{Binding Path = Getymin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                            <Label x:Name="yname" HorizontalContentAlignment="Center" Content="{Binding YName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="⩾" Grid.Column="1"/>
+                        </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getymax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="23" VerticalAlignment="Top"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" Content="{Binding YName}"/>
+                        <ComboBox HorizontalContentAlignment="Center" Grid.Column="1"  Width="40"
+                                      ItemsSource="{Binding Path = GetlistSing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                      SelectedItem="{Binding Path = Getsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="2"
+                                               Content="{Binding Path = Getk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label HorizontalContentAlignment="Center" Content="*" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="{Binding XName}" Grid.Column="1"/>
+                            <Label HorizontalContentAlignment="Center" Content="+" Grid.Column="1"/>
+                        </StackPanel>
+                        <Label HorizontalContentAlignment="Center" Grid.Column="4"
+                                               Content="{Binding Path = Getb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Выбор экстремума" DockPanel.Dock="Top" Margin="5, 5, 5, 5">
-                <Grid>
-                    <ComboBox HorizontalContentAlignment="Center" Grid.Column="1" 
-                              ItemsSource="{Binding Path = GetlistExtremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                              SelectedItem="{Binding Path = Getextremum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </Grid>
-            </GroupBox>
+            <StackPanel>
+                <GroupBox Header="Исходная точка" Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <Label Content="{Binding XName}" Width="25"></Label>
+                            <wpfx:DoubleUpDown Value="{Binding PointOfStartX}"></wpfx:DoubleUpDown>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{Binding YName}" Width="25"></Label>
+                            <wpfx:DoubleUpDown Value="{Binding PointOfStartY}"></wpfx:DoubleUpDown>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Шаги графика">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Шаг по"></Label>
+                            <Label Content="{Binding XName}"></Label>
+                            <wpfx:DoubleUpDown Value="{Binding StepGraphX}"></wpfx:DoubleUpDown>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Шаг по"></Label>
+                            <Label Content="{Binding YName}"></Label>
+                            <wpfx:DoubleUpDown Value="{Binding StepGraphY}" ></wpfx:DoubleUpDown>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            
+            
+            <!--<GroupBox Header="Шаги" 
+                      Visibility="{Binding IsVariableParametersMethod, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel >
+                    <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Top">
+                        <TextBlock Text="X: " Width="20"></TextBlock>
+                        <wpfx:DoubleUpDown Value="{Binding StepForMethodX}"></wpfx:DoubleUpDown>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <TextBlock Text="Y: " Width="20"></TextBlock>
+                        <wpfx:DoubleUpDown Value="{Binding StepForMethodY}"></wpfx:DoubleUpDown>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>-->
             <GroupBox Header="Выполнение" DockPanel.Dock="Top">
-                <DockPanel Margin="5, 5, 5, 5">
-                    <Button DockPanel.Dock="Top" Content="Построить 3D График" Command="{Binding Build3DChart}"/>
-                    <Button DockPanel.Dock="Top" Content="Очистить график" Command="{Binding Clear}"/>
-                    <Button DockPanel.Dock="Top" Content="Рассчитать" Command="{Binding Start}"/>
-
-                </DockPanel>
+                <StackPanel>
+                    
+                    <Button Content="3D График" Command="{Binding Build3DChart}" Visibility="Collapsed"/>
+                    <Button DockPanel.Dock="Top" Content="Вычислить" Command="{Binding Start}"/>
+                    <Button Content="Очистить график" Command="{Binding Clear}"/>
+                    <Button Content="Построить графики" Command="{Binding BuildGraphs}"/>
+                </StackPanel>
             </GroupBox>
-            <GroupBox Header="Результаты" DockPanel.Dock="Top">
-                <DockPanel Margin="5, 5, 5, 5">
-                    <TextBox IsReadOnly="True"
-                        Text="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </DockPanel>
+            <GroupBox Header="Результаты">
+                <StackPanel>
+                    <Label Content="{Binding Path = Getresult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" Width="160"/>
+                </StackPanel>
             </GroupBox>
-        </DockPanel>
-        <DockPanel DockPanel.Dock="Left">
-            <GroupBox DockPanel.Dock="Left" Header="График функции">
-                <DockPanel>
-                    <ig:XamDataChart>
-                        <ig:XamDataChart.Axes>
-                            <ig:NumericXAxis x:Name="xAxis" Title="Ось X"/>
-                            <ig:NumericYAxis x:Name="yAxis" Title="Ось Y"/>
-                        </ig:XamDataChart.Axes>
-                        <ig:XamDataChart.Series>
-                            <ig:ScatterContourSeries 
-                                XAxis="{Binding ElementName=xAxis}"
-                                YAxis="{Binding ElementName=yAxis}"
-                                XMemberPath="X"
-                                YMemberPath="Y"
-                                ValueMemberPath="Z"
-                                ItemsSource="{Binding Getchart3Ddata}"/>
-                            <ig:ScatterLineSeries
-                                Thickness="2"
-                                XAxis="{Binding ElementName=xAxis}"
-                                YAxis="{Binding ElementName=yAxis}"
-                                XMemberPath="X"
-                                YMemberPath="Y"
-                                ItemsSource="{Binding Getchart2Ddata}"/>
-                            <ig:ScatterSeries 
-                                XAxis="{Binding ElementName=xAxis}"
-                                YAxis="{Binding ElementName=yAxis}"
-                                XMemberPath="X"
-                                YMemberPath="Y"
-                                ItemsSource="{Binding GetfunctionValue}"/>
-                        </ig:XamDataChart.Series>
-                    </ig:XamDataChart>
-                </DockPanel>
-            </GroupBox>
-        </DockPanel>
-    </DockPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <TabControl>
+                    <TabItem Header="2D график">
+                        <StackPanel>
+                                <ig:XamDataChart Width="460" Height="450">
+                                    <ig:XamDataChart.Axes>
+                                        <ig:NumericXAxis x:Name="xAxis" Title="{Binding XName}"/>
+                                    <ig:NumericYAxis x:Name="yAxis" Title="{Binding YName}"/>
+                                    </ig:XamDataChart.Axes>
+                                    <ig:XamDataChart.Series>
+                                        <ig:ScatterContourSeries 
+                                            XAxis="{Binding ElementName=xAxis}"
+                                            YAxis="{Binding ElementName=yAxis}"
+                                            XMemberPath="X"
+                                            YMemberPath="Y"
+                                            ValueMemberPath="Z"
+                                            ItemsSource="{Binding Getchart3Ddata}"/>
+                                        <ig:ScatterLineSeries
+                                            Thickness="2"
+                                            XAxis="{Binding ElementName=xAxis}"
+                                            YAxis="{Binding ElementName=yAxis}"
+                                            XMemberPath="X"
+                                            YMemberPath="Y"
+                                            ItemsSource="{Binding Getchart2Ddata}"/>
+                                        <ig:ScatterSeries 
+                                            Thickness="3"
+                                            XAxis="{Binding ElementName=xAxis}"
+                                            YAxis="{Binding ElementName=yAxis}"
+                                            XMemberPath="X"
+                                            YMemberPath="Y"
+                                            ItemsSource="{Binding GetfunctionValue}"/>
+                                    </ig:XamDataChart.Series>
+                                </ig:XamDataChart>
+                            </StackPanel>
+                    </TabItem>
+                    <TabItem Header="3D график">
+                        <ig:XamScatterSurface3D  Width="460" Height="450"
+                            ItemsSource="{Binding Path = Getchart3Ddata, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            XMemberPath="X" YMemberPath="Y" ZMemberPath="Z"
+                            RimThickness="0.1"
+                            SeriesColorInterpolation="AHSV"
+                            CrosshairAxes="XY"
+                            CrosshairBrush="Red"
+                            CrosshairThickness="3">
+                            <ig:XamScatterSurface3D.SeriesColors>
+                                <ig:ColorCollection>
+                                    <Color>DarkSlateBlue</Color>
+                                    <Color>DeepSkyBlue</Color>
+                                    <Color>Yellow</Color>
+                                </ig:ColorCollection>
+                            </ig:XamScatterSurface3D.SeriesColors>
+                            <ig:XamScatterSurface3D.XAxis>
+                                <ig:LinearAxis Title="{Binding XName}"/>
+                            </ig:XamScatterSurface3D.XAxis>
+                            <ig:XamScatterSurface3D.YAxis>
+                                <ig:LinearAxis Title="{Binding YName}"/>
+                            </ig:XamScatterSurface3D.YAxis>
+                            <ig:XamScatterSurface3D.ZAxis>
+                                <ig:LinearAxis x:Name="cfname" Title="{Binding CFName}"/>
+                            </ig:XamScatterSurface3D.ZAxis>
+                        </ig:XamScatterSurface3D>
+                    </TabItem>
+                    <TabItem Header="Табличные данные">
+                        <DataGrid Width="460" Height="450" ItemsSource="{Binding PointsTable}"
+                                  CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="T1" Binding="{Binding Path=X, StringFormat='0.00'}" />
+                                <DataGridTextColumn Width="*" Header="T2" Binding="{Binding Path=Y, StringFormat='0.00'}" />
+                                <DataGridTextColumn Width="*" Header="S(T1, T2)" Binding="{Binding Path=Z, StringFormat='0.00'}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+            <TabControl Margin="5,0,5,0">
+                <TabItem Header="Описание задачи" >
+                    <DockPanel MaxHeight="410" MaxWidth="500" VerticalAlignment="Top">
+                        <GroupBox DockPanel.Dock="Top" Header="Формализованное описание" MaxHeight="230">
+                            <Image Source="{Binding SourceImageFormDesc}"  />
+                        </GroupBox>
+                        <TextBox DockPanel.Dock="Bottom" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+                                 AcceptsReturn="True" IsReadOnly="True" Text="{Binding DescriptionTask}"
+                                 TextWrapping="Wrap" MaxWidth="500"></TextBox>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Значения">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Значение" Width="70"></Label>
+                                <wpfx:DoubleUpDown x:Name="textBoxValue" Width="60" Value="{Binding ParameterByTaskValue}"></wpfx:DoubleUpDown>
+                            </StackPanel>
+                            <Button Content="Изменить" Command="{Binding ChangeValueCommand}" Height="23" Margin="3,0,0,0"></Button>
+                        </StackPanel>
+                        <StackPanel>
+                            <DataGrid Width="500" Height="390" ItemsSource ="{Binding Path=ParametersTable, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedParameter}"
+                                      CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Описание" Binding="{Binding Path=Description}" />
+                                    <DataGridTextColumn  Header="Обозначение" Binding="{Binding Path=Notation}" />
+                                    <DataGridTextColumn  Header="Значение" Binding="{Binding Path=Value}" />
+                                    <DataGridTextColumn  Header="Ед. измерения" Binding="{Binding Path=UnitOfMeasName}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </StackPanel>
 </Window>

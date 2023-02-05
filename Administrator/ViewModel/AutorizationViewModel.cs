@@ -3,8 +3,8 @@ using System.Security;
 using System.Windows;
 using AdministratorFormsWPF.View;
 using Autofac;
-using ProgramSystem.Bll.Services.Interfaces;
 using ReactiveUI;
+using Services.Interfaces;
 using Startup.Autofac;
 using User.View;
 
@@ -45,7 +45,7 @@ namespace Startup.ViewModel
 
         public AutorizationViewModel(IUserService userService)
         {
-            Login = "user/admin";
+            //Login = "admin";
             //Password = "researcher";
             _userService = userService;
 

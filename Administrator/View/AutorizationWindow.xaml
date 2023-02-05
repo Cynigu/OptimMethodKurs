@@ -11,7 +11,7 @@
             <Setter Property="Height" Value="40"></Setter>
         </Style>
     </Window.Resources>
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,5,0">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock FontSize="14" IsHitTestVisible="False" Width="73" Height="27"> Логин</TextBlock>
                 <TextBox  Text="{Binding Login}"  BorderBrush="Black" Width="210" HorizontalAlignment="Stretch"/>
